@@ -4,5 +4,8 @@
         <file>res/play.png</file>
         <file>res/stop.png</file>
         <file>res/settings.png</file>
+        <file>ButtonsBar.qml</file>
+        <file>MainField.qml</file>
+        <file>SettingsBar.qml</file>
     </qresource>
 </RCC>
