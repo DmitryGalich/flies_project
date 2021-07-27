@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
 
+add_subdirectory(abstract_qml_handler)
 add_subdirectory(main_window_handler)
 add_subdirectory(qml_engine_configurator)
 

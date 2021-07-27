@@ -15,6 +15,8 @@ target_include_directories(${TARGET_TITLE}
 target_link_libraries(${TARGET_TITLE}
     PRIVATE
         Qt5::Core
+    PUBLIC
+        UI::AbstractQmlHandler
 )
 
 

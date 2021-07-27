@@ -3,12 +3,13 @@
 
 #include <QObject>
 
-class MainWindowHandler : public QObject {
-  Q_OBJECT
+#include "abstract_qml_handler.h"
 
+class MainWindowHandler : public QObject, public AbstractQMLHandler {
+  Q_OBJECT
  public:
-  MainWindowHandler(QObject* parent = nullptr);
-  virtual ~MainWindowHandler();
+  MainWindowHandler(const std::string& qml_title, QObject* parent = nullptr);
+  virtual ~MainWindowHandler() override;
 };
 
 #endif
