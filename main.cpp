@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
+#include "data_holder.h"
 #include "qml_engine_configurator.h"
 
 int main(int argc, char* argv[]) {
@@ -12,7 +13,8 @@ int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
-  QMLEngineConfigurator configurator(engine.rootContext(), &app);
+  DataHolder data_holder;
+  QMLEngineConfigurator configurator(engine.rootContext(), data_holder, &app);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(

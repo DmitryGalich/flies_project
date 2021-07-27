@@ -10,7 +10,7 @@ ColumnLayout {
     Label {
         Layout.fillHeight: true
         Layout.fillWidth: true
-        text: "Flyes"
+        text: "Flies"
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter

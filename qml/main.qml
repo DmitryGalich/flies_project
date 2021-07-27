@@ -10,7 +10,7 @@ ApplicationWindow {
     minimumWidth: 640
 
     Material.theme: Material.Dark
-    Material.accent: Material.Purple
+    Material.accent: Material.color(Material.Green)
 
     visible: true
 

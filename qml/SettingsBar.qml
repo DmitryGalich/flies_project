@@ -5,10 +5,74 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Material 2.2
 import QtQuick.Controls 2.13
 
-ColumnLayout {}
+ColumnLayout {
+    anchors.fill: parent
+
+    RowLayout {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        Label {
+            text: qsTr("Кол-во ячеек:")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillWidth: true
+        }
+
+        SpinBox {
+            editable: true
+
+            validator: IntValidator {
+                bottom: 0
+                top: 100
+            }
+        }
+    }
+
+    RowLayout {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        Label {
+            text: qsTr("Кол-во мух:")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Layout.fillWidth: true
+        }
+
+        SpinBox {
+            editable: true
+
+            validator: IntValidator {
+                bottom: 0
+                top: 100
+            }
+        }
+    }
+
+    ListView {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+
+        model: fliesModel
+        delegate: Text {
+            text: "Fly: " + stupidity
+        }
+    }
+
+    Rectangle {
+        Layout.fillHeight: true
+        Layout.fillWidth: true
+        opacity: 0
+    }
+}
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:640}D{i:5}
+    D{i:0;autoSize:true;height:480;width:640}
 }
 ##^##*/
 
