@@ -11,13 +11,14 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Core Quick REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
 
-add_subdirectory(ui)
+add_subdirectory(main_window_handler)
+add_subdirectory(qml_engine_configurator)
 
 add_executable(${PROJECT_NAME}
       main.cpp
-      ui/qml/qml.qrc
+      qml/qml.qrc
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -25,4 +26,5 @@ target_link_libraries(${PROJECT_NAME}
         UI::QMLEngineConfigurator
 
 	Qt5::Core 
-	Qt5::Quick)
+        Qt5::Quick
+        Qt5::QuickControls2)

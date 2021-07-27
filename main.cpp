@@ -1,10 +1,13 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQuickStyle>
 
 #include "qml_engine_configurator.h"
 
 int main(int argc, char* argv[]) {
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+  QQuickStyle::setStyle("Material");
 
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
