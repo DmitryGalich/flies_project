@@ -1,0 +1,2 @@
+add_subdirectory(main_window_handler)
+add_subdirectory(qml_engine_configurator)
