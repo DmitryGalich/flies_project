@@ -13,9 +13,6 @@ QMLEngineConfigurator::QMLEngineConfigurator(QQmlContext* context,
   context_->setContextProperty(flies_model_->GetQmlTitle().c_str(),
                                flies_model_.get());
 
-  Fly fly(0);
-  flies_model_->AddFly(fly);
-  //  flies_model_->AddFly(Fly{1, this});
-  //  flies_model_->AddFly(Fly{2, this});
-  //  flies_model_->AddFly(Fly{3, this});
+  for (int i = 0; i < 50; i++)
+    flies_model_->AddFly({i, {"Fly_" + std::to_string(i)}});
 }

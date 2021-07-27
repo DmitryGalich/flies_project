@@ -26,6 +26,8 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
 
   if (role == StupidityRole)
     return flies_.at(index.row()).GetStupidity();
+  else if (role == NameRole)
+    return flies_.at(index.row()).GetName().c_str();
 
   return QVariant();
 }
@@ -33,5 +35,6 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
 QHash<int, QByteArray> FliesModel::roleNames() const {
   QHash<int, QByteArray> roles;
   roles[StupidityRole] = "stupidity";
+  roles[NameRole] = "name";
   return roles;
 }

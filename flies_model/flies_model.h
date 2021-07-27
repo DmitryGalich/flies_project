@@ -13,7 +13,7 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
  public:
-  enum AnimalRoles { StupidityRole = Qt::UserRole + 1 };
+  enum AnimalRoles { StupidityRole = Qt::UserRole + 1, NameRole };
 
   FliesModel(const std::string& qml_title,
              QList<Fly>& flies,

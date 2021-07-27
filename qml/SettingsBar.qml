@@ -58,9 +58,32 @@ ColumnLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
 
-        model: fliesModel
-        delegate: Text {
-            text: "Fly: " + stupidity
+        model: FliesModel
+        delegate: RowLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Label {
+                text: name
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
+
+            SpinBox {
+                Layout.fillWidth: true
+
+                editable: true
+
+                value: stupidity
+
+                validator: IntValidator {
+                    bottom: 0
+                    top: 100
+                }
+            }
         }
     }
 
