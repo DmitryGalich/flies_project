@@ -45,8 +45,11 @@ ApplicationWindow {
                 icon.source: "res/play.png"
                 icon.color: Material.color(Material.Green)
 
-                onClicked: {
+                visible: (MainWindowHandler
+                          === null) ? false : MainWindowHandler.playButtonVisability
 
+                onClicked: {
+                    MainWindowHandler.playButtonClicked()
                 }
             }
 
@@ -59,8 +62,11 @@ ApplicationWindow {
                 icon.source: "res/stop.png"
                 icon.color: Material.color(Material.Red)
 
-                onClicked: {
+                visible: (MainWindowHandler
+                          === null) ? false : MainWindowHandler.stopButtonVisability
 
+                onClicked: {
+                    MainWindowHandler.stopButtonClicked()
                 }
             }
         }
