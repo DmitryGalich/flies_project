@@ -9,21 +9,51 @@ ColumnLayout {
     anchors.fill: parent
 
     RowLayout {
-        Layout.fillHeight: true
         Layout.fillWidth: true
+        Layout.fillHeight: true
+        Layout.minimumHeight: parent.height * 0.1
+        Layout.maximumHeight: parent.height * 0.1
+
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
         Label {
+            Layout.fillWidth: true
+
+            text: qsTr("Flies project 0.1")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            Layout.bottomMargin: 5
+            font.bold: true
+            font.pointSize: 15
+
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
+    }
+
+    RowLayout {
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+        Label {
+            Layout.fillWidth: true
+
             text: qsTr("Кол-во ячеек:")
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
+
+            font.italic: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillWidth: true
         }
 
         SpinBox {
-            editable: true
+            Layout.fillWidth: true
+            Layout.maximumWidth: parent.width * 0.5
 
+            editable: true
             validator: IntValidator {
                 bottom: 0
                 top: 100
@@ -32,21 +62,27 @@ ColumnLayout {
     }
 
     RowLayout {
-        Layout.fillHeight: true
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
         Layout.fillWidth: true
+        Layout.fillHeight: true
 
         Label {
+            Layout.fillWidth: true
+
             text: qsTr("Кол-во мух:")
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
+            font.italic: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            Layout.fillWidth: true
         }
 
         SpinBox {
-            editable: true
+            Layout.fillWidth: true
+            Layout.maximumWidth: parent.width * 0.5
 
+            editable: true
             validator: IntValidator {
                 bottom: 0
                 top: 100
@@ -54,26 +90,90 @@ ColumnLayout {
         }
     }
 
-    ListView {
-        Layout.fillHeight: true
+    Label {
+        Layout.fillHeight: false
+
+        text: qsTr("Мухи")
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.WordWrap
+        Layout.margins: 5
         Layout.fillWidth: true
+        font.pointSize: 13
+        font.bold: true
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+    }
+
+    RowLayout {
+        Layout.bottomMargin: 10
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        Label {
+            Layout.fillHeight: false
+            Layout.fillWidth: true
+
+            text: qsTr("Имя")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            font.italic: true
+            font.bold: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
+
+        Label {
+            Layout.fillHeight: false
+            Layout.fillWidth: true
+            Layout.maximumWidth: parent.width * 0.5
+
+            text: qsTr("Тупость")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+            font.italic: true
+            font.bold: true
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
+    }
+
+    ListView {
+        boundsMovement: Flickable.StopAtBounds
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        Layout.margins: 2
+        topMargin: 2
+
+        boundsBehavior: Flickable.StopAtBounds
+        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
         model: FliesModel
+
         delegate: RowLayout {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            Label {
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            TextEdit {
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.5
+                Layout.maximumWidth: parent.width * 0.5
+
                 text: name
+
+                color: "white"
 
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                Layout.fillWidth: true
             }
 
             SpinBox {
                 Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.5
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                 editable: true
 
@@ -85,12 +185,6 @@ ColumnLayout {
                 }
             }
         }
-    }
-
-    Rectangle {
-        Layout.fillHeight: true
-        Layout.fillWidth: true
-        opacity: 0
     }
 }
 /*##^##

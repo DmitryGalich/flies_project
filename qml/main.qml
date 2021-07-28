@@ -42,15 +42,16 @@ ApplicationWindow {
         width: 0.5 * parent.width
         height: parent.height
         interactive: true
-        visible: false
+        visible: true
         edge: Qt.LeftEdge
 
         SettingsBar {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            anchors.fill: parent
 
             Layout.margins: 2
         }
+
+
     }
 }
 
