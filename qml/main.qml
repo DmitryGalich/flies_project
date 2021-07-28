@@ -16,7 +16,7 @@ ApplicationWindow {
 
     title: qsTr("Flyes project")
 
-    RowLayout {
+    ColumnLayout {
         anchors.fill: parent
 
         ButtonsBar {
@@ -25,7 +25,6 @@ ApplicationWindow {
 
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.maximumWidth: parent.width * 0.05
         }
 
         MainField {
@@ -36,23 +35,22 @@ ApplicationWindow {
         }
     }
 
-    Drawer {
-        id: settingsDrawer
+    //    Drawer {
+    //        id: settingsDrawer
 
-        width: 0.5 * parent.width
-        height: parent.height
-        interactive: true
-        visible: true
-        edge: Qt.LeftEdge
+    //        width: 0.5 * parent.width
+    //        height: parent.height
+    //        interactive: true
+    //        visible: true
+    //        edge: Qt.LeftEdge
 
-        SettingsBar {
-            anchors.fill: parent
+    //        SettingsBar {
+    //            anchors.fill: parent
 
-            Layout.margins: 2
-        }
+    //            Layout.margins: 2
+    //        }
 
-
-    }
+    //    }
 }
 
 /*##^##

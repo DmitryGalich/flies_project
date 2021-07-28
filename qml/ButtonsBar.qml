@@ -6,32 +6,22 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Controls 2.13
 import QtGraphicalEffects 1.0
 
-ColumnLayout {
-    Button {
-        id: settingsButton
+RowLayout {
 
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        Layout.fillWidth: true
+    //    Button {
+    //        id: settingsButton
 
-        icon.source: "res/settings.png"
+    //        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+    //        Layout.fillWidth: true
 
-        onClicked: {
-            settingsDrawer.open()
-        }
-    }
+    //        icon.source: "res/settings.png"
 
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.fillHeight: true
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        opacity: 0
-    }
-
+    //        onClicked: {
+    //            settingsDrawer.open()
+    //        }
+    //    }
     Button {
         id: playButton
-
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        Layout.fillWidth: true
 
         icon.source: "res/play.png"
         icon.color: Material.color(Material.Green)
@@ -46,9 +36,6 @@ ColumnLayout {
     Button {
         id: stopButton
 
-        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-        Layout.fillWidth: true
-
         icon.source: "res/stop.png"
         icon.color: Material.color(Material.Red)
 
@@ -56,6 +43,52 @@ ColumnLayout {
 
         onClicked: {
             MainWindowHandler.stopButtonClicked()
+        }
+    }
+    Rectangle {
+        Layout.fillWidth: true
+        opacity: 0
+    }
+
+    RowLayout {
+        //        Layout.minimumWidth: parent.width * 0.2
+        Layout.maximumWidth: parent.width * 0.3
+        Layout.fillWidth: true
+
+        Label {
+            Layout.fillWidth: true
+
+            text: qsTr("Cells:")
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            wrapMode: Text.WordWrap
+
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+        }
+
+        SpinBox {
+            Layout.fillWidth: true
+
+            editable: true
+            validator: IntValidator {
+                bottom: 1
+                top: 100
+            }
+        }
+    }
+
+    Rectangle {
+        Layout.fillWidth: true
+        opacity: 0
+    }
+
+    Button {
+        id: flyButton
+
+        icon.source: "res/fly.png"
+
+        onClicked: {
+
         }
     }
 }
