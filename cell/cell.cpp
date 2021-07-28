@@ -1,6 +1,6 @@
 #include "cell.h"
 
-Cell::Cell(const int capacity) : capacity_(capacity) {}
+Cell::Cell(const int capacity) : capacity_(capacity), flies_count_(0) {}
 
 int Cell::GetCapacity() const {
   return capacity_;

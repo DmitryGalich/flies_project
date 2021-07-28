@@ -3,7 +3,8 @@
 
 class Cell {
  public:
-  Cell(const int capacity);
+  Cell(const int capacity = 10);
+  ~Cell() = default;
 
   int GetCapacity() const;
   void SetCapacity(const int capacity);

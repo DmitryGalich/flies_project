@@ -17,6 +17,7 @@ target_link_libraries(${TARGET_TITLE}
 
     PUBLIC
         UI::FliesModel
+        UI::CellsModel
         UI::MainWindowHandler
         Backend::DataHolder
 )

@@ -8,7 +8,7 @@
 
 class DataHolder {
  public:
-  DataHolder() : flies_(3) {}
+  DataHolder() : flies_(3), cells_(5, std::vector<Cell>(5)) {}
   ~DataHolder() = default;
 
   std::vector<Fly>& GetFlies() { return flies_; }

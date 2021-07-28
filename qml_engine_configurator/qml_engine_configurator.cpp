@@ -12,4 +12,9 @@ QMLEngineConfigurator::QMLEngineConfigurator(QQmlContext* context,
       new FliesModel("FliesModel", data_holder.GetFlies(), this));
   context_->setContextProperty(flies_model_->GetQmlTitle().c_str(),
                                flies_model_.get());
+
+  cells_model_.reset(
+      new CellsModel("CellsModel", data_holder.GetCells(), this));
+  context_->setContextProperty(flies_model_->GetQmlTitle().c_str(),
+                               flies_model_.get());
 }

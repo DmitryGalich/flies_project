@@ -78,8 +78,6 @@ ColumnLayout {
     }
 
     ListView {
-        id: listView
-        boundsMovement: Flickable.StopAtBounds
         Layout.fillWidth: true
         Layout.fillHeight: true
 
