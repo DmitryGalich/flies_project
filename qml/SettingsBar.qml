@@ -40,7 +40,7 @@ ColumnLayout {
         Label {
             Layout.fillWidth: true
 
-            text: qsTr("Кол-во ячеек:")
+            text: qsTr("Cells in row:")
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
@@ -55,7 +55,7 @@ ColumnLayout {
 
             editable: true
             validator: IntValidator {
-                bottom: 0
+                bottom: 1
                 top: 100
             }
         }
@@ -70,7 +70,7 @@ ColumnLayout {
         Label {
             Layout.fillWidth: true
 
-            text: qsTr("Кол-во мух:")
+            text: qsTr("Flies count:")
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
@@ -82,10 +82,17 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width * 0.5
 
+            value: (FliesModel === null) ? false : FliesModel.fliesCount
+
             editable: true
             validator: IntValidator {
-                bottom: 0
+                bottom: 1
                 top: 100
+            }
+
+            onValueChanged: {
+                if (FliesModel != null)
+                    FliesModel.setFliesCount(value)
             }
         }
     }
@@ -93,7 +100,7 @@ ColumnLayout {
     Label {
         Layout.fillHeight: false
 
-        text: qsTr("Мухи")
+        text: qsTr("Flies")
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         wrapMode: Text.WordWrap
@@ -113,7 +120,7 @@ ColumnLayout {
             Layout.fillHeight: false
             Layout.fillWidth: true
 
-            text: qsTr("Имя")
+            text: qsTr("Name")
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
@@ -127,7 +134,7 @@ ColumnLayout {
             Layout.fillWidth: true
             Layout.maximumWidth: parent.width * 0.5
 
-            text: qsTr("Тупость")
+            text: qsTr("Stupidity")
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WordWrap
@@ -169,7 +176,8 @@ ColumnLayout {
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 
                 onTextChanged: {
-                    FliesModel.setFlyName(index, text)
+                    if (FliesModel != null)
+                        FliesModel.setFlyName(index, text)
                 }
             }
 
@@ -189,7 +197,8 @@ ColumnLayout {
                 }
 
                 onValueChanged: {
-                    FliesModel.setFlyStupidity(index, value)
+                    if (FliesModel != null)
+                        FliesModel.setFlyStupidity(index, value)
                 }
             }
         }

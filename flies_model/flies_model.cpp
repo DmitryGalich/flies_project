@@ -3,7 +3,7 @@
 #include <iostream>
 
 FliesModel::FliesModel(const std::string& qml_title,
-                       QList<Fly>& flies,
+                       std::vector<Fly>& flies,
                        QObject* parent)
     : QAbstractListModel(parent),
       AbstractQMLHandler(qml_title),
@@ -11,19 +11,13 @@ FliesModel::FliesModel(const std::string& qml_title,
 
 FliesModel::~FliesModel() {}
 
-void FliesModel::AddFly(const Fly& fly) {
-  beginInsertRows(QModelIndex(), rowCount(), rowCount());
-  flies_.push_back(fly);
-  endInsertRows();
-}
-
 int FliesModel::rowCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
-  return flies_.count();
+  return flies_.size();
 }
 
 QVariant FliesModel::data(const QModelIndex& index, int role) const {
-  if (index.row() < 0 || index.row() >= flies_.count())
+  if (index.row() < 0 || index.row() >= static_cast<int>(flies_.size()))
     return QVariant();
 
   if (role == StupidityRole)
@@ -40,6 +34,16 @@ void FliesModel::setFlyStupidity(const int index, const int stupidity) {
 
 void FliesModel::setFlyName(const int index, const QString& name) {
   flies_[index].SetName(name.toStdString());
+}
+
+void FliesModel::setFliesCount(const int count) {
+  beginResetModel();
+  flies_.resize(count);
+  endResetModel();
+}
+
+int FliesModel::getFliesCount() const {
+  return flies_.size();
 }
 
 QHash<int, QByteArray> FliesModel::roleNames() const {

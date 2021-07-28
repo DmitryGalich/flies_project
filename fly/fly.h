@@ -7,7 +7,9 @@ class Fly : public QObject {
   Q_OBJECT
 
  public:
-  Fly(const int stupidity, const std::string& name, QObject* parent = nullptr);
+  Fly(const int stupidity = 5,
+      const std::string& name = "Fly",
+      QObject* parent = nullptr);
   Fly(const Fly& fly);
   virtual ~Fly() override = default;
   Fly operator=(const Fly& fly);

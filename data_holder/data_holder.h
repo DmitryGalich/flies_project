@@ -9,13 +9,13 @@
 
 class DataHolder {
  public:
-  DataHolder() = default;
+  DataHolder() : flies_(3) {}
   ~DataHolder() = default;
 
-  QList<Fly>& GetFlies() { return flies_; }
+  std::vector<Fly>& GetFlies() { return flies_; }
 
  private:
-  QList<Fly> flies_;
+  std::vector<Fly> flies_;
 };
 
 #endif

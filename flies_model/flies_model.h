@@ -12,15 +12,18 @@
 class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
+  Q_PROPERTY(int fliesCount READ getFliesCount NOTIFY fliesCountChanged)
+
+ signals:
+  void fliesCountChanged();
+
  public:
   enum AnimalRoles { StupidityRole = Qt::UserRole + 1, NameRole };
 
   FliesModel(const std::string& qml_title,
-             QList<Fly>& flies,
+             std::vector<Fly>& flies,
              QObject* parent = nullptr);
   virtual ~FliesModel() override;
-
-  void AddFly(const Fly& fly);
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
   QVariant data(const QModelIndex& index,
@@ -29,10 +32,13 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
  protected:
   Q_INVOKABLE void setFlyStupidity(const int index, const int stupidity);
   Q_INVOKABLE void setFlyName(const int index, const QString& name);
+  Q_INVOKABLE void setFliesCount(const int count);
+
+  int getFliesCount() const;
 
   QHash<int, QByteArray> roleNames() const override;
 
-  QList<Fly>& flies_;
+  std::vector<Fly>& flies_;
 };
 
 #endif
