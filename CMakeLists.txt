@@ -15,6 +15,8 @@ find_package(Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
 
 add_subdirectory(fly)
 add_subdirectory(flies_model)
+add_subdirectory(cell)
+add_subdirectory(board)
 add_subdirectory(data_holder)
 add_subdirectory(abstract_qml_handler)
 add_subdirectory(main_window_handler)
@@ -28,6 +30,7 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
   PRIVATE 
         Backend::DataHolder
+        Backend::Board
         UI::QMLEngineConfigurator
 
 	Qt5::Core 

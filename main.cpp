@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
+#include "board.h"
 #include "data_holder.h"
 #include "qml_engine_configurator.h"
 
@@ -14,6 +15,7 @@ int main(int argc, char* argv[]) {
   QQmlApplicationEngine engine;
 
   DataHolder data_holder;
+  Board board(data_holder.GetCells());
   QMLEngineConfigurator configurator(engine.rootContext(), data_holder, &app);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));

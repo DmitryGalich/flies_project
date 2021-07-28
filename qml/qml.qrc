@@ -8,5 +8,7 @@
         <file>MainField.qml</file>
         <file>SettingsBar.qml</file>
         <file>res/fly.png</file>
+        <file>SettingsTabFlies.qml</file>
+        <file>SettingsTabBoard.qml</file>
     </qresource>
 </RCC>

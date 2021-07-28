@@ -1,10 +1,9 @@
 #ifndef DATA_HOLDER
 #define DATA_HOLDER
 
-#include <QList>
-
 #include <memory>
 
+#include "cell.h"
 #include "fly.h"
 
 class DataHolder {
@@ -13,9 +12,11 @@ class DataHolder {
   ~DataHolder() = default;
 
   std::vector<Fly>& GetFlies() { return flies_; }
+  std::vector<std::vector<Cell>>& GetCells() { return cells_; }
 
  private:
   std::vector<Fly> flies_;
+  std::vector<std::vector<Cell>> cells_;
 };
 
 #endif
