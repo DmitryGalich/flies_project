@@ -9,7 +9,7 @@ import QtGraphicalEffects 1.0
 ColumnLayout {
     anchors.fill: parent
 
-    RowLayout {
+    SettingsTitle {
         Layout.margins: 5
         Layout.fillWidth: true
         Layout.fillHeight: true
@@ -17,38 +17,6 @@ ColumnLayout {
         Layout.maximumHeight: parent.height * 0.1
 
         Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-        Image {
-            id: icon
-            verticalAlignment: Image.AlignBottom
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            source: "res/fly.png"
-            fillMode: Image.PreserveAspectFit
-
-            ColorOverlay {
-                anchors.fill: icon
-                source: icon
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                color: Material.accent
-            }
-        }
-
-        Label {
-            Layout.fillWidth: true
-
-            text: qsTr("Flies project 0.1")
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            wrapMode: Text.WordWrap
-            Layout.bottomMargin: 5
-            font.bold: true
-            font.pointSize: 15
-
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-
-            color: Material.accentColor
-        }
     }
 
     TabBar {

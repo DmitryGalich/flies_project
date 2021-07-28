@@ -10,5 +10,6 @@
         <file>res/fly.png</file>
         <file>SettingsTabFlies.qml</file>
         <file>SettingsTabBoard.qml</file>
+        <file>SettingsTitle.qml</file>
     </qresource>
 </RCC>
