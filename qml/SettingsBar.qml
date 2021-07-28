@@ -167,6 +167,10 @@ ColumnLayout {
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+                onTextChanged: {
+                    FliesModel.setFlyName(index, text)
+                }
             }
 
             SpinBox {
@@ -182,6 +186,10 @@ ColumnLayout {
                 validator: IntValidator {
                     bottom: 0
                     top: 100
+                }
+
+                onValueChanged: {
+                    FliesModel.setFlyStupidity(index, value)
                 }
             }
         }

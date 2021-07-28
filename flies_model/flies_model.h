@@ -27,6 +27,9 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
                 int role = Qt::DisplayRole) const override;
 
  protected:
+  Q_INVOKABLE void setFlyStupidity(const int index, const int stupidity);
+  Q_INVOKABLE void setFlyName(const int index, const QString& name);
+
   QHash<int, QByteArray> roleNames() const override;
 
   QList<Fly>& flies_;

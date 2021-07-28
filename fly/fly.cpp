@@ -30,6 +30,6 @@ std::string Fly::GetName() const {
   return name_;
 }
 
-void Fly::SetName(const std::string name) {
+void Fly::SetName(const std::string& name) {
   name_ = name;
 }

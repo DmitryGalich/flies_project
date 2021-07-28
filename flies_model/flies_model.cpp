@@ -1,5 +1,7 @@
 #include "flies_model.h"
 
+#include <iostream>
+
 FliesModel::FliesModel(const std::string& qml_title,
                        QList<Fly>& flies,
                        QObject* parent)
@@ -30,6 +32,14 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
     return flies_.at(index.row()).GetName().c_str();
 
   return QVariant();
+}
+
+void FliesModel::setFlyStupidity(const int index, const int stupidity) {
+  flies_[index].SetStupidity(stupidity);
+}
+
+void FliesModel::setFlyName(const int index, const QString& name) {
+  flies_[index].SetName(name.toStdString());
 }
 
 QHash<int, QByteArray> FliesModel::roleNames() const {

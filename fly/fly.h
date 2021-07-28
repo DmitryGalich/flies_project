@@ -16,7 +16,7 @@ class Fly : public QObject {
   void SetStupidity(const int stupidity);
 
   std::string GetName() const;
-  void SetName(const std::string name);
+  void SetName(const std::string& name);
 
  private:
   int stupidity_;
