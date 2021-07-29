@@ -3,13 +3,6 @@
         <file>main.qml</file>
         <file>res/play.png</file>
         <file>res/stop.png</file>
-        <file>res/settings.png</file>
-        <file>ButtonsBar.qml</file>
-        <file>MainField.qml</file>
-        <file>SettingsBar.qml</file>
         <file>res/fly.png</file>
-        <file>SettingsTabFlies.qml</file>
-        <file>SettingsTabBoard.qml</file>
-        <file>SettingsTitle.qml</file>
     </qresource>
 </RCC>

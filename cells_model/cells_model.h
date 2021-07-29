@@ -7,38 +7,37 @@
 #include <QObject>
 
 #include "abstract_qml_handler.h"
-#include "board.h"
 #include "cell.h"
 
 class CellsModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
-  Q_PROPERTY(int cellsCount READ getCellsCount NOTIFY cellsCountChanged)
+  Q_PROPERTY(
+      int gridSide READ gridSide WRITE setGridSide NOTIFY gridSideChanged)
 
  signals:
-  void cellsCountChanged();
+  void gridSideChanged();
 
  public:
   enum AnimalRoles { CapacityRole = Qt::UserRole + 1 };
 
   CellsModel(const std::string& qml_title,
-             std::vector<std::vector<Cell>>& cells,
+             std::vector<Cell>& cells,
              QObject* parent = nullptr);
   virtual ~CellsModel() override = default;
 
-  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-  QVariant data(const QModelIndex& index,
-                int role = Qt::DisplayRole) const override;
+  int gridSide() const;
+  void setGridSide(int value);
 
  protected:
+  int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex& index,
+                int role = Qt::DisplayRole) const override;
   QHash<int, QByteArray> roleNames() const override;
 
-  int getCellsCount() const;
-
-  void ConvertToCellsList();
-
-  std::vector<std::vector<Cell>>& cells_;
-  std::vector<Cell*> cells_list_;
+ private:
+  std::vector<Cell>& cells_;
 };
 
 #endif

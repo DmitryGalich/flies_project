@@ -9,7 +9,6 @@
 #include "cells_model.h"
 #include "data_holder.h"
 #include "flies_model.h"
-#include "main_window_handler.h"
 
 class QMLEngineConfigurator : public QObject {
   Q_OBJECT
@@ -23,7 +22,6 @@ class QMLEngineConfigurator : public QObject {
  private:
   QQmlContext* context_;
 
-  std::unique_ptr<MainWindowHandler> main_window_;
   std::unique_ptr<FliesModel> flies_model_;
   std::unique_ptr<CellsModel> cells_model_;
 };

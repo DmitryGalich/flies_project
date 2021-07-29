@@ -16,6 +16,5 @@ target_link_libraries(${TARGET_TITLE}
 
    PUBLIC
     Backend::Cell
-    Backend::Board
     UI::AbstractQmlHandler
 )
