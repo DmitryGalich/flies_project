@@ -19,14 +19,30 @@ Rectangle {
             id: cell
             width: board.width / BoardModel.gridSide
             height: board.height / BoardModel.gridSide
-            border.color: Material.color(Material.Grey)
 
+            border.color: Material.color(Material.Grey, Material.Shade700)
             color: Material.backgroundColor
 
             Label {
                 anchors.fill: parent
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+
+                text: fliesInfo
+
+                color: Material.color(Material.Grey, Material.Shade500)
+            }
+
+            Label {
+                anchors.fill: parent
+                leftPadding: 2
+                topPadding: 1
+
+                text: "x: " + Math.floor(
+                          (cell.x + 1) / board.cellWidth) + " y: " + Math.floor(
+                          (cell.y + 1) / board.cellHeight)
+
+                color: Material.color(Material.Grey, Material.Shade500)
             }
         }
     }
@@ -37,7 +53,8 @@ Rectangle {
             var x_cell = Math.floor(mouseX / board.cellWidth)
             var y_cell = Math.floor(mouseY / board.cellHeight)
 
-            console.log("X: " + x_cell + " Y: " + y_cell)
+            console.log("X: " + x_cell + " Y: " + y_cell + " = id: " + board.indexAt(
+                            mouseX, mouseY))
         }
     }
 }

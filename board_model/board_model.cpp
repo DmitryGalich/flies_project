@@ -27,15 +27,16 @@ QVariant BoardModel::data(const QModelIndex& index, int role) const {
   if (index.column() < 0 || index.column() >= static_cast<int>(cells_.size()))
     return QVariant();
 
-  if (role == CapacityRole)
-    return cells_.at(index.row()).GetCapacity();
+  if (role == FliesInfoRole)
+    return QString::number(cells_.at(index.row()).GetFliesCount()) + " of " +
+           QString::number(cells_.at(index.row()).GetCapacity());
 
   return QVariant();
 }
 
 QHash<int, QByteArray> BoardModel::roleNames() const {
   QHash<int, QByteArray> roles;
-  roles[CapacityRole] = "capacity";
+  roles[FliesInfoRole] = "fliesInfo";
   return roles;
 }
 

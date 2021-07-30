@@ -10,7 +10,7 @@ void Cell::SetCapacity(const int capacity) {
   capacity_ = capacity;
 }
 
-int Cell::GetFliesyCount() const {
+int Cell::GetFliesCount() const {
   return flies_count_;
 }
 
@@ -31,4 +31,12 @@ void Cell::RemoveFly() {
     return;
 
   flies_count_--;
+}
+
+const Cell::Coordinates& Cell::GetCoordinates() const {
+  return cooridinates_;
+}
+
+void Cell::SetCoordinates(const Cell::Coordinates& cooridinates) {
+  cooridinates_ = cooridinates;
 }

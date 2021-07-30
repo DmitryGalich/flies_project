@@ -17,9 +17,10 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
 
  signals:
   void gridSideChanged();
+  void cellInfoChanged();
 
  public:
-  enum Roles { CapacityRole = Qt::UserRole + 1 };
+  enum Roles { FliesInfoRole = Qt::UserRole + 1 };
 
   BoardModel(const std::string& qml_title,
              std::vector<Cell>& cells,
@@ -32,8 +33,10 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
  protected:
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
   int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+
   QVariant data(const QModelIndex& index,
                 int role = Qt::DisplayRole) const override;
+
   QHash<int, QByteArray> roleNames() const override;
 
  private:
