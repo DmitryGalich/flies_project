@@ -6,5 +6,6 @@
         <file>res/fly.png</file>
         <file>ControlsTab.qml</file>
         <file>Board.qml</file>
+        <file>CellSettings.qml</file>
     </qresource>
 </RCC>

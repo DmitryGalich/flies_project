@@ -17,14 +17,16 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
 
  signals:
   void gridSideChanged();
+  void openCellSettingWindow(const int cell_index, const int current_capacity);
 
  public:
   enum Roles {
-    FliesInfoRole = Qt::UserRole + 1,
+    CellFliesRole = Qt::UserRole + 1,
     CellXRole,
     CellYRole,
     CellWidthRole,
-    CellHeightRole
+    CellHeightRole,
+    CellCapacitytRole
   };
 
   BoardModel(const std::string& qml_title,
@@ -46,6 +48,9 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
                int role = Qt::EditRole) override;
 
   QHash<int, QByteArray> roleNames() const override;
+
+  Q_INVOKABLE void openCellSettingsWindow(const int cell_index);
+  Q_INVOKABLE void setCellCapacity(const int cell_index, const int value);
 
  private:
   std::vector<Cell>& cells_;

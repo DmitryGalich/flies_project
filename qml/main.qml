@@ -4,8 +4,11 @@ import QtQuick.Layouts 1.12
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Controls.Material 2.2
 import QtQuick.Controls 2.13
+import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
+    id: general
+
     minimumHeight: 480
     minimumWidth: 640
 
@@ -35,6 +38,18 @@ ApplicationWindow {
 
             Layout.fillHeight: true
             Layout.fillWidth: true
+        }
+    }
+
+    CellSettings {
+        width: 400
+        height: 80
+
+        x: parent.width * 0.5 - width * 0.5
+        y: parent.height * 0.5 - height * 0.5
+
+        onSetCellCapacityValue: {
+            board.setCellCapacityValue(cellIndex, value)
         }
     }
 }

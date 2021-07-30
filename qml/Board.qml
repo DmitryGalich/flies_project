@@ -6,6 +6,14 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Controls 2.13
 
 Rectangle {
+    function setCellCapacityValue(cellIndex, capacity) {
+        if (BoardModel === null)
+            return
+
+        BoardModel.setCellCapacity(cellIndex, capacity)
+        board.forceLayout()
+    }
+
     GridView {
         id: board
         anchors.fill: parent
@@ -44,7 +52,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
 
-                text: fliesInfo
+                text: cellCapacity
 
                 color: Material.color(Material.Grey, Material.Shade500)
             }
@@ -52,12 +60,13 @@ Rectangle {
     }
 
     MouseArea {
-        id: cellArea
+        id: cellsArea
+
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
 
-            //            board.itemAt(mouseX, mouseY).color = "red"
+            BoardModel.openCellSettingsWindow(board.indexAt(mouseX, mouseY))
         }
     }
 }
