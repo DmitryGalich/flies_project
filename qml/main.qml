@@ -20,6 +20,8 @@ ApplicationWindow {
         anchors.fill: parent
 
         ControlsTab {
+            Layout.rightMargin: 5
+            Layout.leftMargin: 5
             Layout.margins: 2
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
 

@@ -17,7 +17,6 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
 
  signals:
   void gridSideChanged();
-  void cellInfoChanged();
 
  public:
   enum Roles {

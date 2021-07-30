@@ -12,10 +12,8 @@ RowLayout {
         icon.source: "res/play.png"
         icon.color: Material.color(Material.Green)
 
-        //        visible: (MainWindowHandler === null) ? false : MainWindowHandler.playButtonVisability
         onClicked: {
 
-            //            MainWindowHandler.playButtonClicked()
         }
     }
 
@@ -25,24 +23,22 @@ RowLayout {
         icon.source: "res/stop.png"
         icon.color: Material.color(Material.Red)
 
-        //        visible: (MainWindowHandler === null) ? false : MainWindowHandler.stopButtonVisability
         onClicked: {
 
-            //            MainWindowHandler.stopButtonClicked()
         }
     }
 
     Rectangle {
         Layout.fillWidth: true
+        Layout.minimumWidth: parent.width * 0.1
+
         opacity: 0
     }
 
     RowLayout {
-        Layout.maximumWidth: parent.width * 0.3
         Layout.fillWidth: true
 
         Label {
-            Layout.fillWidth: true
 
             text: qsTr("Cells in side:")
             horizontalAlignment: Text.AlignHCenter
@@ -53,8 +49,8 @@ RowLayout {
         }
 
         SpinBox {
-            Layout.fillWidth: true
 
+            Layout.fillWidth: true
             value: (BoardModel != null) ? BoardModel.gridSide : 0
 
             editable: true
@@ -72,6 +68,8 @@ RowLayout {
 
     Rectangle {
         Layout.fillWidth: true
+        Layout.minimumWidth: parent.width * 0.1
+
         opacity: 0
     }
 
@@ -85,3 +83,10 @@ RowLayout {
         }
     }
 }
+
+/*##^##
+Designer {
+    D{i:0;height:461;width:636}
+}
+##^##*/
+

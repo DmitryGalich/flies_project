@@ -52,15 +52,12 @@ Rectangle {
     }
 
     MouseArea {
+        id: cellArea
         anchors.fill: parent
+        hoverEnabled: true
         onClicked: {
-            var x_cell = Math.floor(mouseX / board.cellWidth)
-            var y_cell = Math.floor(mouseY / board.cellHeight)
 
-            console.log("X: " + x_cell + " Y: " + y_cell + " = id: " + board.indexAt(
-                            mouseX, mouseY))
-
-            BoardModel.kek()
+            //            board.itemAt(mouseX, mouseY).color = "red"
         }
     }
 }
