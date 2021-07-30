@@ -53,6 +53,10 @@ bool BoardModel::setData(const QModelIndex& index,
   else if (role == CellCapacitytRole)
     cells_.at(index.row()).SetCapacity(value.toInt());
 
+  dataChanged(index, index,
+              {CellFliesRole, CellXRole, CellYRole, CellWidthRole,
+               CellHeightRole, CellCapacitytRole});
+
   return true;
 }
 
@@ -91,5 +95,5 @@ void BoardModel::openCellSettingsWindow(const int cell_index) {
   emit openCellSettingWindow(cell_index, cells_.at(cell_index).GetCapacity());
 }
 void BoardModel::setCellCapacity(const int cell_index, const int value) {
-  setData(this->index(cell_index, 0), value, CellCapacitytRole);
+  setData(index(cell_index, 0), value, CellCapacitytRole);
 }
