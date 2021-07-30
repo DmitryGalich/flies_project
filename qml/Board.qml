@@ -17,11 +17,27 @@ Rectangle {
 
         delegate: Rectangle {
             id: cell
+
+            function updateData() {
+                cellX = cell.x
+                cellY = cell.y
+                cellWidth = cell.width
+                cellHeight = cell.height
+            }
+
             width: board.width / BoardModel.gridSide
             height: board.height / BoardModel.gridSide
 
             border.color: Material.color(Material.Grey, Material.Shade700)
             color: Material.backgroundColor
+
+            onWidthChanged: {
+                updateData()
+            }
+
+            onHeightChanged: {
+                updateData()
+            }
 
             Label {
                 anchors.fill: parent
@@ -29,18 +45,6 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
 
                 text: fliesInfo
-
-                color: Material.color(Material.Grey, Material.Shade500)
-            }
-
-            Label {
-                anchors.fill: parent
-                leftPadding: 2
-                topPadding: 1
-
-                text: "x: " + Math.floor(
-                          (cell.x + 1) / board.cellWidth) + " y: " + Math.floor(
-                          (cell.y + 1) / board.cellHeight)
 
                 color: Material.color(Material.Grey, Material.Shade500)
             }
@@ -55,6 +59,8 @@ Rectangle {
 
             console.log("X: " + x_cell + " Y: " + y_cell + " = id: " + board.indexAt(
                             mouseX, mouseY))
+
+            BoardModel.kek()
         }
     }
 }

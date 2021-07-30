@@ -20,7 +20,13 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
   void cellInfoChanged();
 
  public:
-  enum Roles { FliesInfoRole = Qt::UserRole + 1 };
+  enum Roles {
+    FliesInfoRole = Qt::UserRole + 1,
+    CellXRole,
+    CellYRole,
+    CellWidthRole,
+    CellHeightRole
+  };
 
   BoardModel(const std::string& qml_title,
              std::vector<Cell>& cells,
@@ -36,6 +42,9 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
 
   QVariant data(const QModelIndex& index,
                 int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex& index,
+               const QVariant& value,
+               int role = Qt::EditRole) override;
 
   QHash<int, QByteArray> roleNames() const override;
 

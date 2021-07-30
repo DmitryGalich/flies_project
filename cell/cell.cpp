@@ -33,10 +33,34 @@ void Cell::RemoveFly() {
   flies_count_--;
 }
 
-const Cell::Coordinates& Cell::GetCoordinates() const {
-  return cooridinates_;
+int Cell::GetX() const {
+  return x_;
 }
 
-void Cell::SetCoordinates(const Cell::Coordinates& cooridinates) {
-  cooridinates_ = cooridinates;
+void Cell::SetX(const int x) {
+  x_ = x;
+}
+
+int Cell::GetY() const {
+  return y_;
+}
+
+void Cell::SetY(const int y) {
+  y_ = y;
+}
+
+int Cell::GetWidth() const {
+  return width_;
+}
+
+void Cell::SetWidth(const int width) {
+  width_ = width;
+}
+
+int Cell::GetHeight() const {
+  return height_;
+}
+
+void Cell::SetHeight(const int height) {
+  height_ = height;
 }

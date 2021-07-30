@@ -34,9 +34,36 @@ QVariant BoardModel::data(const QModelIndex& index, int role) const {
   return QVariant();
 }
 
+bool BoardModel::setData(const QModelIndex& index,
+                         const QVariant& value,
+                         int role) {
+  if (index.row() < 0 || index.row() >= static_cast<int>(cells_.size()))
+    return false;
+
+  if (index.column() < 0 || index.column() >= static_cast<int>(cells_.size()))
+    return false;
+
+  if (role == CellXRole)
+    cells_.at(index.row()).SetX(value.toInt());
+  else if (role == CellYRole)
+    cells_.at(index.row()).SetY(value.toInt());
+  else if (role == CellWidthRole)
+    cells_.at(index.row()).SetWidth(value.toInt());
+  else if (role == CellHeightRole)
+    cells_.at(index.row()).SetHeight(value.toInt());
+
+  return true;
+}
+
 QHash<int, QByteArray> BoardModel::roleNames() const {
   QHash<int, QByteArray> roles;
+
   roles[FliesInfoRole] = "fliesInfo";
+  roles[CellXRole] = "cellX";
+  roles[CellYRole] = "cellY";
+  roles[CellWidthRole] = "cellWidth";
+  roles[CellHeightRole] = "cellHeight";
+
   return roles;
 }
 

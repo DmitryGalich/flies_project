@@ -3,11 +3,6 @@
 
 class Cell {
  public:
-  struct Coordinates {
-    int x_;
-    int y_;
-  };
-
   Cell(const int capacity = 10);
   ~Cell() = default;
 
@@ -19,13 +14,26 @@ class Cell {
   bool AddFly();
   void RemoveFly();
 
-  const Coordinates& GetCoordinates() const;
-  void SetCoordinates(const Coordinates& cooridinates);
+  int GetX() const;
+  void SetX(const int x);
+
+  int GetY() const;
+  void SetY(const int y);
+
+  int GetWidth() const;
+  void SetWidth(const int width);
+
+  int GetHeight() const;
+  void SetHeight(const int height);
 
  private:
   int capacity_;
   int flies_count_;
-  Coordinates cooridinates_;
+
+  int x_;
+  int y_;
+  int width_;
+  int height_;
 };
 
 #endif

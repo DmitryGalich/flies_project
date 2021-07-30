@@ -14,7 +14,7 @@ ApplicationWindow {
 
     visible: true
 
-    title: qsTr("Flyes project")
+    title: qsTr("Flies project")
 
     ColumnLayout {
         anchors.fill: parent
