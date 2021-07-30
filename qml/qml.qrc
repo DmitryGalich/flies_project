@@ -7,5 +7,6 @@
         <file>ControlsTab.qml</file>
         <file>Board.qml</file>
         <file>CellSettings.qml</file>
+        <file>res/close.png</file>
     </qresource>
 </RCC>

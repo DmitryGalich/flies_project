@@ -28,14 +28,29 @@ Popup {
     ColumnLayout {
         anchors.fill: parent
 
-        Label {
+        RowLayout {
+            Layout.fillHeight: true
             Layout.fillWidth: true
-            text: "Cell settings"
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            font.bold: true
-            font.pointSize: 12
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+
+            Rectangle {
+                Layout.fillWidth: true
+                opacity: 0
+            }
+
+            Label {
+                Layout.fillWidth: true
+                text: "Cell settings"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                font.bold: true
+                font.pointSize: 12
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            Button {
+                icon.source: "res/close.png"
+                onClicked: close()
+            }
         }
 
         RowLayout {

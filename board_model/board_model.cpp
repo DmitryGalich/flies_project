@@ -96,5 +96,8 @@ void BoardModel::openCellSettingsWindow(const int cell_index) {
                                     cells_.at(cell_index).GetCapacity());
 }
 void BoardModel::setCellCapacity(const int cell_index, const int value) {
+  if (cells_.at(cell_index).GetCapacity() == value)
+    return;
+
   setData(index(cell_index, 0), value, CellCapacitytRole);
 }

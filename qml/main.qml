@@ -43,7 +43,7 @@ ApplicationWindow {
 
     CellSettings {
         width: 400
-        height: 80
+        height: 120
 
         x: parent.width * 0.5 - width * 0.5
         y: parent.height * 0.5 - height * 0.5
