@@ -1,5 +1,5 @@
-#ifndef CELLS_MODEL
-#define CELLS_MODEL
+#ifndef BOARD_MODEL
+#define BOARD_MODEL
 
 #include <memory>
 
@@ -9,7 +9,7 @@
 #include "abstract_qml_handler.h"
 #include "cell.h"
 
-class CellsModel : public QAbstractListModel, public AbstractQMLHandler {
+class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
   Q_PROPERTY(
@@ -19,12 +19,12 @@ class CellsModel : public QAbstractListModel, public AbstractQMLHandler {
   void gridSideChanged();
 
  public:
-  enum AnimalRoles { CapacityRole = Qt::UserRole + 1 };
+  enum Roles { CapacityRole = Qt::UserRole + 1 };
 
-  CellsModel(const std::string& qml_title,
+  BoardModel(const std::string& qml_title,
              std::vector<Cell>& cells,
              QObject* parent = nullptr);
-  virtual ~CellsModel() override = default;
+  virtual ~BoardModel() override = default;
 
   int gridSide() const;
   void setGridSide(int value);

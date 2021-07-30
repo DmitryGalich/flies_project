@@ -21,8 +21,8 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   enum AnimalRoles { StupidityRole = Qt::UserRole + 1, NameRole };
 
   FliesModel(const std::string& qml_title,
-             std::vector<Fly>& flies,
-             QObject* parent = nullptr);
+            std::vector<Fly>& flies,
+            QObject* parent = nullptr);
   virtual ~FliesModel() override;
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;

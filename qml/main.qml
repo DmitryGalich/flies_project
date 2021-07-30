@@ -76,7 +76,7 @@ ApplicationWindow {
                 SpinBox {
                     Layout.fillWidth: true
 
-                    value: (CellsModel != null) ? CellsModel.gridSide : 0
+                    value: (BoardModel != null) ? BoardModel.gridSide : 0
 
                     editable: true
                     validator: IntValidator {
@@ -85,8 +85,8 @@ ApplicationWindow {
                     }
 
                     onValueChanged: {
-                        if (CellsModel != null)
-                            CellsModel.gridSide = value
+                        if (BoardModel != null)
+                            BoardModel.gridSide = value
                     }
                 }
             }
@@ -108,19 +108,19 @@ ApplicationWindow {
         }
 
         GridView {
-            id: grid
+            id: board
             boundsBehavior: Flickable.StopAtBounds
             Layout.fillHeight: true
             Layout.fillWidth: true
 
-            model: CellsModel
+            model: BoardModel
 
-            cellWidth: (CellsModel != null) ? (grid.width / CellsModel.gridSide) : 0
-            cellHeight: (CellsModel != null) ? (grid.height / CellsModel.gridSide) : 0
+            cellWidth: (BoardModel != null) ? (board.width / BoardModel.gridSide) : 0
+            cellHeight: (BoardModel != null) ? (board.height / BoardModel.gridSide) : 0
 
             delegate: Rectangle {
-                width: grid.width / CellsModel.gridSide
-                height: grid.height / CellsModel.gridSide
+                width: board.width / BoardModel.gridSide
+                height: board.height / BoardModel.gridSide
                 border.color: Material.color(Material.Grey)
                 color: Material.backgroundColor
             }

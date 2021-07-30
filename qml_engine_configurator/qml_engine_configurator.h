@@ -6,9 +6,9 @@
 #include <QObject>
 #include <QQmlContext>
 
-#include "cells_model.h"
+#include "board_model.h"
+#include "cell_model.h"
 #include "data_holder.h"
-#include "flies_model.h"
 
 class QMLEngineConfigurator : public QObject {
   Q_OBJECT
@@ -23,7 +23,7 @@ class QMLEngineConfigurator : public QObject {
   QQmlContext* context_;
 
   std::unique_ptr<FliesModel> flies_model_;
-  std::unique_ptr<CellsModel> cells_model_;
+  std::unique_ptr<BoardModel> board_model_;
 };
 
 #endif

@@ -1,10 +1,10 @@
-set(TARGET_TITLE cells_model)
+set(TARGET_TITLE board_model)
 
 add_library(${TARGET_TITLE}
    ${TARGET_TITLE}.cpp
    ${TARGET_TITLE}.h)
 
-add_library(UI::CellsModel ALIAS ${TARGET_TITLE})
+add_library(UI::BoardModel ALIAS ${TARGET_TITLE})
 
 target_include_directories(${TARGET_TITLE}
     PUBLIC

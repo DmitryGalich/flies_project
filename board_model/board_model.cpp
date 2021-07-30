@@ -1,26 +1,26 @@
-#include "cells_model.h"
+#include "board_model.h"
 
 #include <cmath>
 #include <iostream>
 
-CellsModel::CellsModel(const std::string& qml_title,
+BoardModel::BoardModel(const std::string& qml_title,
                        std::vector<Cell>& cells,
                        QObject* parent)
     : QAbstractListModel(parent),
       AbstractQMLHandler(qml_title),
       cells_(cells) {}
 
-int CellsModel::rowCount(const QModelIndex& parent) const {
+int BoardModel::rowCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
   return cells_.size();
 }
 
-int CellsModel::columnCount(const QModelIndex& parent) const {
+int BoardModel::columnCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
   return cells_.size();
 }
 
-QVariant CellsModel::data(const QModelIndex& index, int role) const {
+QVariant BoardModel::data(const QModelIndex& index, int role) const {
   if (index.row() < 0 || index.row() >= static_cast<int>(cells_.size()))
     return QVariant();
 
@@ -33,13 +33,13 @@ QVariant CellsModel::data(const QModelIndex& index, int role) const {
   return QVariant();
 }
 
-QHash<int, QByteArray> CellsModel::roleNames() const {
+QHash<int, QByteArray> BoardModel::roleNames() const {
   QHash<int, QByteArray> roles;
   roles[CapacityRole] = "capacity";
   return roles;
 }
 
-void CellsModel::setGridSide(int value) {
+void BoardModel::setGridSide(int value) {
   beginResetModel();
   cells_.resize(std::pow(value, 2));
   endResetModel();
@@ -47,6 +47,6 @@ void CellsModel::setGridSide(int value) {
   emit gridSideChanged();
 }
 
-int CellsModel::gridSide() const {
+int BoardModel::gridSide() const {
   return std::sqrt(cells_.size());
 }
