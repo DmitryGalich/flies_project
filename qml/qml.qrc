@@ -4,5 +4,7 @@
         <file>res/play.png</file>
         <file>res/stop.png</file>
         <file>res/fly.png</file>
+        <file>ControlsTab.qml</file>
+        <file>Board.qml</file>
     </qresource>
 </RCC>

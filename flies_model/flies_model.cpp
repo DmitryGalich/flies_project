@@ -1,10 +1,10 @@
-#include "cell_model.h"
+#include "flies_model.h"
 
 #include <iostream>
 
 FliesModel::FliesModel(const std::string& qml_title,
-                     std::vector<Fly>& flies,
-                     QObject* parent)
+                       std::vector<Fly>& flies,
+                       QObject* parent)
     : QAbstractListModel(parent),
       AbstractQMLHandler(qml_title),
       flies_(flies) {}

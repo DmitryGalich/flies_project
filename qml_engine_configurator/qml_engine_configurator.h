@@ -7,8 +7,8 @@
 #include <QQmlContext>
 
 #include "board_model.h"
-#include "cell_model.h"
 #include "data_holder.h"
+#include "flies_model.h"
 
 class QMLEngineConfigurator : public QObject {
   Q_OBJECT
