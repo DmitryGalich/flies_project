@@ -92,7 +92,8 @@ void BoardModel::openCellSettingsWindow(const int cell_index) {
   if (static_cast<size_t>(cell_index) >= cells_.size())
     return;
 
-  emit openCellSettingWindow(cell_index, cells_.at(cell_index).GetCapacity());
+  emit signalTopenCellSettingWindow(cell_index,
+                                    cells_.at(cell_index).GetCapacity());
 }
 void BoardModel::setCellCapacity(const int cell_index, const int value) {
   setData(index(cell_index, 0), value, CellCapacitytRole);

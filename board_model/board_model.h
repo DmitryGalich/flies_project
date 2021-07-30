@@ -17,7 +17,8 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
 
  signals:
   void gridSideChanged();
-  void openCellSettingWindow(const int cell_index, const int current_capacity);
+  void signalTopenCellSettingWindow(const int cell_index,
+                                    const int current_capacity);
 
  public:
   enum Roles {

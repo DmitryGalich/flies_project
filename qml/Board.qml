@@ -65,7 +65,6 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-
             BoardModel.openCellSettingsWindow(board.indexAt(mouseX, mouseY))
         }
     }

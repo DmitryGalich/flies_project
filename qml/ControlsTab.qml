@@ -55,7 +55,7 @@ RowLayout {
 
             editable: true
             validator: IntValidator {
-                bottom: 1
+                bottom: 2
                 top: 100
             }
 

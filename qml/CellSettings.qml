@@ -18,8 +18,9 @@ Popup {
     Connections {
         target: BoardModel
 
-        onOpenCellSettingWindow: {
+        onSignalTopenCellSettingWindow: {
             cellIndex = cell_index
+            capacitySpinBox.value = current_capacity
             visible = true
         }
     }
@@ -43,7 +44,7 @@ Popup {
 
             Label {
 
-                text: qsTr("Cells in side:")
+                text: qsTr("Flies capacity:")
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
@@ -52,8 +53,8 @@ Popup {
             }
 
             SpinBox {
+                id: capacitySpinBox
                 Layout.fillWidth: true
-                value: (BoardModel != null) ? BoardModel.gridSide : 0
 
                 editable: true
                 validator: IntValidator {
