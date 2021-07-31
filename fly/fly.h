@@ -32,13 +32,25 @@ class Fly : public QObject {
 
   int GetCellId() const;
 
+  std::string GetIconPath();
+
  private:
+  std::string icon_path_;
+
   int stupidity_;
   int age_;
   std::string name_;
 
   // ?
   int cell_id_;
+};
+
+class FliesHolder {
+ public:
+  FliesHolder() = default;
+  ~FliesHolder() = default;
+
+  std::vector<Fly> flies_;
 };
 
 #endif

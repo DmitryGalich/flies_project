@@ -8,6 +8,9 @@ namespace {
 static int flies_count = 0;
 static const int kStupidityMax = 10;
 
+static const std::vector<std::string> kIconPaths{
+    "res/fly_0.png", "res/fly_1.png", "res/fly_2.png", "res/fly_3.png"};
+
 }  // namespace
 
 Fly::Fly(const std::string& name,
@@ -15,28 +18,32 @@ Fly::Fly(const std::string& name,
          const int cell_id,
          QObject* parent)
     : QObject(parent),
+      icon_path_(kIconPaths.at(flies_count % kIconPaths.size())),
       stupidity_(stupidity),
       age_(0),
       name_(name),
       cell_id_(cell_id) {
   flies_count++;
+  std::cout << "Constructor" << std::endl;
 }
 
 Fly::Fly(const Fly& fly)
     : QObject(fly.parent()),
-      stupidity_(fly.GetStupidity()),
-      age_(fly.GetAge()),
-      name_(fly.GetName()) {
-  flies_count++;
+      icon_path_(fly.icon_path_),
+      stupidity_(fly.stupidity_),
+      age_(fly.age_),
+      name_(fly.name_) {
+  std::cout << "Constructor copy" << std::endl;
 }
 
 Fly Fly::operator=(const Fly& fly) {
   if (this == &fly)
     return *this;
 
-  stupidity_ = fly.GetStupidity();
-  name_ = fly.GetName();
   age_ = fly.age_;
+  icon_path_ = fly.icon_path_;
+  name_ = fly.name_;
+  stupidity_ = fly.stupidity_;
 
   return *this;
 }
@@ -75,6 +82,10 @@ void Fly::IncreaseAge() {
 
 int Fly::GetCellId() const {
   return cell_id_;
+}
+
+std::string Fly::GetIconPath() {
+  return icon_path_;
 }
 
 void Fly::Run() {

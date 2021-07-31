@@ -68,7 +68,7 @@ Rectangle {
             id: fly
 
             Image {
-                source: "res/fly_0.png"
+                source: flyIcon
                 sourceSize.height: 50
                 sourceSize.width: 30
             }

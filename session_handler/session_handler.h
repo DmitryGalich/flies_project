@@ -11,11 +11,11 @@ class SessionHandler {
   SessionHandler() : cells_(9) {}
   ~SessionHandler() = default;
 
-  std::vector<Fly>& GetFlies();
+  FliesHolder& GetFlies();
   std::vector<Cell>& GetCells();
 
  private:
-  std::vector<Fly> flies_;
+  FliesHolder flies_;
   std::vector<Cell> cells_;
 };
 

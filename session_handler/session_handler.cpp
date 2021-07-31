@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-std::vector<Fly>& SessionHandler::GetFlies() {
+FliesHolder& SessionHandler::GetFlies() {
   return flies_;
 }
 

@@ -19,10 +19,16 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
                              int stupidity_max);
 
  public:
-  enum Roles { StupidityRole = Qt::UserRole + 1, NameRole, AgeRole, CellRole };
+  enum Roles {
+    StupidityRole = Qt::UserRole + 1,
+    NameRole,
+    AgeRole,
+    CellRole,
+    IconRole
+  };
 
   FliesModel(const std::string& qml_title,
-             std::vector<Fly>& flies,
+             FliesHolder& flies_holder,
              const std::function<int()> request_cells_count,
              QObject* parent = nullptr);
   virtual ~FliesModel() override;
@@ -41,7 +47,7 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
 
  private:
   const std::function<int()> kRequestCellsCount_;
-  std::vector<Fly>& flies_;
+  FliesHolder& flies_holder_;
 };
 
 #endif
