@@ -18,23 +18,18 @@ Fly::Fly(const std::string& name,
          const int cell_id,
          QObject* parent)
     : QObject(parent),
-      icon_path_(kIconPaths.at(flies_count % kIconPaths.size())),
+      icon_path_(kIconPaths.at(flies_count++ % kIconPaths.size())),
       stupidity_(stupidity),
       age_(0),
       name_(name),
-      cell_id_(cell_id) {
-  flies_count++;
-  std::cout << "Constructor" << std::endl;
-}
+      cell_id_(cell_id) {}
 
 Fly::Fly(const Fly& fly)
     : QObject(fly.parent()),
       icon_path_(fly.icon_path_),
       stupidity_(fly.stupidity_),
       age_(fly.age_),
-      name_(fly.name_) {
-  std::cout << "Constructor copy" << std::endl;
-}
+      name_(fly.name_) {}
 
 Fly Fly::operator=(const Fly& fly) {
   if (this == &fly)

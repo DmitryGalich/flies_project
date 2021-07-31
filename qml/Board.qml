@@ -64,13 +64,14 @@ Rectangle {
         boundsBehavior: Flickable.StopAtBounds
         model: FliesModel
 
-        delegate: StackLayout {
+        delegate: Rectangle {
             id: fly
 
             Image {
+                id: flyImage
                 source: flyIcon
-                sourceSize.height: 50
-                sourceSize.width: 30
+                sourceSize.height: board.cellHeight * 0.2
+                sourceSize.width: board.cellWidth * 0.2
             }
         }
     }
