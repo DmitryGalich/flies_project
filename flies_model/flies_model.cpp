@@ -84,6 +84,7 @@ QHash<int, QByteArray> FliesModel::roleNames() const {
   roles[NameRole] = "flyName";
   roles[AgeRole] = "flyAge";
   roles[CellRole] = "flyCell";
+
   roles[IconRole] = "flyIcon";
 
   roles[XRole] = "flyX";
