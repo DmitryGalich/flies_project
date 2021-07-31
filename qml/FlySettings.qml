@@ -28,6 +28,7 @@ Popup {
                 text: "Fly settings"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                font.capitalization: Font.AllUppercase
                 font.bold: true
                 font.pointSize: 12
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
@@ -39,37 +40,160 @@ Popup {
             }
         }
 
-        RowLayout {
+        ColumnLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.maximumHeight: parent.height * 0.8
 
-            Label {
-
-                text: qsTr("Stupidity:")
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-                wrapMode: Text.WordWrap
-
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-            }
-
-            SpinBox {
-                id: capacitySpinBox
+            RowLayout {
+                Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                editable: true
-                validator: IntValidator {
-                    bottom: 1
-                    top: 10
+                Label {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.4
+                    Layout.fillHeight: true
+
+                    text: qsTr("Name:")
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
 
-                onValueChanged: {
-                    if (value < 1)
-                        value = 1
+                TextEdit {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.5
+                    Layout.fillHeight: true
 
-                    if (value > 10)
-                        value = 10
+                    color: "white"
+                    selectedTextColor: Material.color(Material.accent)
+                    selectionColor: Material.color(Material.accent)
+
+                    text: "kek"
+                    font.pixelSize: 15
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+                    font.bold: false
+                    font.italic: true
+
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 }
+            }
+
+            RowLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.4
+                    Layout.fillHeight: true
+
+                    text: qsTr("Age:")
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.5
+                    Layout.fillHeight: true
+
+                    text: qsTr("KEK")
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+            }
+
+            RowLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.4
+
+                    text: qsTr("Stupidity:")
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                SpinBox {
+                    id: capacitySpinBox
+
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.5
+
+                    editable: true
+                    validator: IntValidator {
+                        bottom: 1
+                        top: 10
+                    }
+
+                    onValueChanged: {
+                        if (value < 1)
+                            value = 1
+
+                        if (value > 10)
+                            value = 10
+                    }
+                }
+            }
+
+            RowLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                Label {
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.4
+
+                    text: qsTr("Cell:")
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WordWrap
+
+                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                }
+
+                SpinBox {
+                    id: cellChooser
+
+                    Layout.fillWidth: true
+                    Layout.minimumWidth: parent.width * 0.5
+
+                    editable: true
+                    validator: IntValidator {
+                        bottom: 1
+                        top: 10
+                    }
+
+                    onValueChanged: {
+                        if (value < 1)
+                            value = 1
+
+                        if (value > 10)
+                            value = 10
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                opacity: 0
             }
         }
     }

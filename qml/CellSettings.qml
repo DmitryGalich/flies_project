@@ -42,6 +42,7 @@ Popup {
                 text: "Cell settings"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                font.capitalization: Font.AllUppercase
                 font.bold: true
                 font.pointSize: 12
                 Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
