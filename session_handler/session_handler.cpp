@@ -2,14 +2,6 @@
 
 #include <iostream>
 
-void SessionHandler::Run() {
-  std::cout << "Run" << std::endl;
-}
-
-void SessionHandler::Stop() {
-  std::cout << "Stop" << std::endl;
-}
-
 std::vector<Fly>& SessionHandler::GetFlies() {
   return flies_;
 }

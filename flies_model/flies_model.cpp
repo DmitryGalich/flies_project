@@ -4,13 +4,11 @@
 
 FliesModel::FliesModel(const std::string& qml_title,
                        std::vector<Fly>& flies,
-                       const std::function<void()> run_session_function,
-                       const std::function<void()> stop_session_function,
+
                        QObject* parent)
     : QAbstractListModel(parent),
       AbstractQMLHandler(qml_title),
-      kRunSession_(run_session_function),
-      kStopSession_(stop_session_function),
+
       flies_(flies) {}
 
 FliesModel::~FliesModel() {}
@@ -33,11 +31,17 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
 }
 
 void FliesModel::runSession() {
-  kRunSession_();
+  for (auto& fly : flies_)
+    fly.Run();
 }
 
 void FliesModel::stopSession() {
-  kStopSession_();
+  for (auto& fly : flies_)
+    fly.Stop();
+}
+
+void FliesModel::addFly() {
+  emit openFlyAdditionWindow();
 }
 
 QHash<int, QByteArray> FliesModel::roleNames() const {

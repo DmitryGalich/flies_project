@@ -55,11 +55,17 @@ RowLayout {
 
             editable: true
             validator: IntValidator {
-                bottom: 2
-                top: 100
+                bottom: 1
+                top: 10
             }
 
             onValueChanged: {
+                if (value < 1)
+                    value = 1
+
+                if (value > 10)
+                    value = 10
+
                 if (BoardModel != null)
                     BoardModel.gridSide = value
             }
@@ -79,7 +85,7 @@ RowLayout {
         icon.source: "res/fly.png"
 
         onClicked: {
-
+            FliesModel.addFly()
         }
     }
 }

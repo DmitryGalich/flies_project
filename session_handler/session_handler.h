@@ -11,9 +11,6 @@ class SessionHandler {
   SessionHandler() : cells_(9) {}
   ~SessionHandler() = default;
 
-  void Run();
-  void Stop();
-
   std::vector<Fly>& GetFlies();
   std::vector<Cell>& GetCells();
 

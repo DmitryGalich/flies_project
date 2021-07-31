@@ -1,6 +1,7 @@
 #include "fly.h"
 
 #include <atomic>
+#include <iostream>
 
 namespace {
 const std::string kDefaultName{"Fly"};
@@ -48,4 +49,12 @@ std::string Fly::GetName() const {
 
 void Fly::SetName(const std::string& name) {
   name_ = name;
+}
+
+void Fly::Run() {
+  std::cout << name_ << " run" << std::endl;
+}
+
+void Fly::Stop() {
+  std::cout << name_ << " stop" << std::endl;
 }

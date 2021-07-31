@@ -6,12 +6,11 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Controls 2.13
 
 Rectangle {
-    function setCellCapacityValue(cellIndex, capacity) {
+    function setCellCapacity(cellIndex, capacity) {
         if (BoardModel === null)
             return
 
         BoardModel.setCellCapacity(cellIndex, capacity)
-        board.forceLayout()
     }
 
     GridView {
@@ -73,9 +72,6 @@ Rectangle {
                 sourceSize.height: 50
                 sourceSize.width: 30
             }
-
-            //            width: board.width
-            //            height: board.height
         }
     }
 

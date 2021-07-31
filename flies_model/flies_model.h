@@ -13,13 +13,14 @@
 class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
+ signals:
+  void openFlyAdditionWindow();
+
  public:
   enum Roles { StupidityRole = Qt::UserRole + 1, NameRole };
 
   FliesModel(const std::string& qml_title,
              std::vector<Fly>& flies,
-             const std::function<void()> run_session_function,
-             const std::function<void()> stop_session_function,
              QObject* parent = nullptr);
   virtual ~FliesModel() override;
 
@@ -31,12 +32,11 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_INVOKABLE void runSession();
   Q_INVOKABLE void stopSession();
 
+  Q_INVOKABLE void addFly();
+
   QHash<int, QByteArray> roleNames() const override;
 
  private:
-  const std::function<void()> kRunSession_;
-  const std::function<void()> kStopSession_;
-
   std::vector<Fly>& flies_;
 };
 

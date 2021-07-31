@@ -19,6 +19,14 @@ ApplicationWindow {
 
     title: qsTr("Flies project")
 
+    Connections {
+        target: FliesModel
+
+        onOpenFlyAdditionWindow: {
+            flySettings.visible = true
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -48,9 +56,21 @@ ApplicationWindow {
         x: parent.width * 0.5 - width * 0.5
         y: parent.height * 0.5 - height * 0.5
 
-        onSetCellCapacityValue: {
-            board.setCellCapacityValue(cellIndex, value)
+        onSetCellCapacity: {
+            board.setCellCapacity(cellIndex, value)
         }
+    }
+
+    FlySettings {
+        id: flySettings
+
+        visible: true
+
+        width: 400
+        height: 240
+
+        x: parent.width * 0.5 - width * 0.5
+        y: parent.height * 0.5 - height * 0.5
     }
 }
 

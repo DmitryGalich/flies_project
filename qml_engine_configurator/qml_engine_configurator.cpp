@@ -4,10 +4,9 @@ QMLEngineConfigurator::QMLEngineConfigurator(QQmlContext* context,
                                              SessionHandler& session_handler,
                                              QObject* parent)
     : QObject(parent), context_(context) {
-  flies_model_.reset(new FliesModel(
-      "FliesModel", session_handler.GetFlies(),
-      [&]() { session_handler.Run(); }, [&]() { session_handler.Stop(); },
-      this));
+  flies_model_.reset(new FliesModel("FliesModel", session_handler.GetFlies(),
+
+                                    this));
   context_->setContextProperty(flies_model_->GetQmlTitle().c_str(),
                                flies_model_.get());
 

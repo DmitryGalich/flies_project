@@ -15,6 +15,9 @@ class Fly : public QObject {
   virtual ~Fly() override = default;
   Fly operator=(const Fly& fly);
 
+  void Run();
+  void Stop();
+
   int GetStupidity() const;
   void SetStupidity(const int stupidity);
 

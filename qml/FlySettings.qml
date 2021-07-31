@@ -7,23 +7,9 @@ import QtQuick.Controls 2.13
 import QtQuick.Dialogs 1.2
 
 Popup {
-    property var cellIndex: 0
-
-    signal setCellCapacity(int cellIndex, int value)
-
     modal: true
     focus: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-
-    Connections {
-        target: BoardModel
-
-        onSignalTopenCellSettingWindow: {
-            cellIndex = cell_index
-            capacitySpinBox.value = current_capacity
-            visible = true
-        }
-    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -39,7 +25,7 @@ Popup {
 
             Label {
                 Layout.fillWidth: true
-                text: "Cell settings"
+                text: "Fly settings"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.bold: true
@@ -59,7 +45,7 @@ Popup {
 
             Label {
 
-                text: qsTr("Flies capacity:")
+                text: qsTr("Stupidity:")
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
@@ -74,17 +60,15 @@ Popup {
                 editable: true
                 validator: IntValidator {
                     bottom: 1
-                    top: 5
+                    top: 10
                 }
 
                 onValueChanged: {
                     if (value < 1)
                         value = 1
 
-                    if (value > 5)
-                        value = 5
-
-                    setCellCapacity(cellIndex, value)
+                    if (value > 10)
+                        value = 10
                 }
             }
         }
