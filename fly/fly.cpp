@@ -4,26 +4,31 @@
 #include <iostream>
 
 namespace {
-const std::string kDefaultName{"Fly"};
-static std::atomic<int> flies_count{0};
+
+static int flies_count = 0;
+static const int kStupidityMax = 10;
+
 }  // namespace
 
-Fly::Fly(const std::string& name, const int stupidity, QObject* parent)
+Fly::Fly(const std::string& name,
+         const int stupidity,
+         const int cell_id,
+         QObject* parent)
     : QObject(parent),
-      kId_(flies_count++),
       stupidity_(stupidity),
-      name_(name) {}
-
-Fly::Fly(const int stupidity, QObject* parent)
-    : QObject(parent), kId_(flies_count++), stupidity_(stupidity) {
-  name_ = kDefaultName + "_" + std::to_string(kId_);
+      age_(0),
+      name_(name),
+      cell_id_(cell_id) {
+  flies_count++;
 }
 
 Fly::Fly(const Fly& fly)
     : QObject(fly.parent()),
-      kId_(flies_count++),
       stupidity_(fly.GetStupidity()),
-      name_(fly.GetName()) {}
+      age_(fly.GetAge()),
+      name_(fly.GetName()) {
+  flies_count++;
+}
 
 Fly Fly::operator=(const Fly& fly) {
   if (this == &fly)
@@ -31,8 +36,17 @@ Fly Fly::operator=(const Fly& fly) {
 
   stupidity_ = fly.GetStupidity();
   name_ = fly.GetName();
+  age_ = fly.age_;
 
   return *this;
+}
+
+std::string Fly::GetDefaultName() {
+  return "fly_" + std::to_string(flies_count);
+}
+
+int Fly::GetStupidityMax() {
+  return kStupidityMax;
 }
 
 int Fly::GetStupidity() const {
@@ -49,6 +63,18 @@ std::string Fly::GetName() const {
 
 void Fly::SetName(const std::string& name) {
   name_ = name;
+}
+
+int Fly::GetAge() const {
+  return age_;
+}
+
+void Fly::IncreaseAge() {
+  age_++;
+}
+
+int Fly::GetCellId() const {
+  return cell_id_;
 }
 
 void Fly::Run() {

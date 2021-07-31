@@ -85,7 +85,7 @@ RowLayout {
         icon.source: "res/fly.png"
 
         onClicked: {
-            FliesModel.addFly()
+            FliesModel.signalizeToOpenFlySettingsWindow()
         }
     }
 }

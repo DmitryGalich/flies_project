@@ -14,13 +14,16 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
  signals:
-  void openFlyAdditionWindow();
+  void openFlyAdditionWindow(QString default_name,
+                             int cells_max,
+                             int stupidity_max);
 
  public:
-  enum Roles { StupidityRole = Qt::UserRole + 1, NameRole };
+  enum Roles { StupidityRole = Qt::UserRole + 1, NameRole, AgeRole, CellRole };
 
   FliesModel(const std::string& qml_title,
              std::vector<Fly>& flies,
+             const std::function<int()> request_cells_count,
              QObject* parent = nullptr);
   virtual ~FliesModel() override;
 
@@ -31,12 +34,13 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
  protected:
   Q_INVOKABLE void runSession();
   Q_INVOKABLE void stopSession();
-
-  Q_INVOKABLE void addFly();
+  Q_INVOKABLE void signalizeToOpenFlySettingsWindow();
+  Q_INVOKABLE void addFly(QString default_name, int stupidity, int cell_id);
 
   QHash<int, QByteArray> roleNames() const override;
 
  private:
+  const std::function<int()> kRequestCellsCount_;
   std::vector<Fly>& flies_;
 };
 

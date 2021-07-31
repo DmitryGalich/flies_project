@@ -8,12 +8,15 @@ class Fly : public QObject {
 
  public:
   Fly(const std::string& name,
-      const int stupidity = 5,
+      const int stupidity,
+      const int cell_id,
       QObject* parent = nullptr);
-  Fly(const int stupidity = 5, QObject* parent = nullptr);
   Fly(const Fly& fly);
   virtual ~Fly() override = default;
   Fly operator=(const Fly& fly);
+
+  static std::string GetDefaultName();
+  static int GetStupidityMax();
 
   void Run();
   void Stop();
@@ -24,11 +27,18 @@ class Fly : public QObject {
   std::string GetName() const;
   void SetName(const std::string& name);
 
- private:
-  const int kId_;
+  int GetAge() const;
+  void IncreaseAge();
 
+  int GetCellId() const;
+
+ private:
   int stupidity_;
+  int age_;
   std::string name_;
+
+  // ?
+  int cell_id_;
 };
 
 #endif

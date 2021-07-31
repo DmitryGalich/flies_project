@@ -19,14 +19,6 @@ ApplicationWindow {
 
     title: qsTr("Flies project")
 
-    Connections {
-        target: FliesModel
-
-        onOpenFlyAdditionWindow: {
-            flySettings.visible = true
-        }
-    }
-
     ColumnLayout {
         anchors.fill: parent
 
@@ -63,8 +55,6 @@ ApplicationWindow {
 
     FlySettings {
         id: flySettings
-
-        visible: true
 
         width: 400
         height: 240

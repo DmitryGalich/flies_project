@@ -11,6 +11,19 @@ Popup {
     focus: true
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
+    Connections {
+        target: FliesModel
+
+        onOpenFlyAdditionWindow: {
+            visible = true
+
+            nameWidget.text = default_name
+            cellWidget.to = cells_max
+            ageWidget.text = "0"
+            stupidityWidget.to = stupidity_max
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -25,6 +38,8 @@ Popup {
 
             Label {
                 Layout.fillWidth: true
+                Layout.fillHeight: true
+
                 text: "Fly settings"
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -35,165 +50,201 @@ Popup {
             }
 
             Button {
+                Layout.fillHeight: true
+
                 icon.source: "res/close.png"
                 onClicked: close()
             }
         }
 
-        ColumnLayout {
+        RowLayout {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.maximumHeight: parent.height * 0.8
 
-            RowLayout {
-                Layout.fillHeight: true
+            Label {
                 Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.4
+                Layout.fillHeight: true
 
-                Label {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.4
-                    Layout.fillHeight: true
+                text: qsTr("Name:")
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
 
-                    text: qsTr("Name:")
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
 
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            TextEdit {
+                id: nameWidget
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.5
+                Layout.fillHeight: true
+
+                color: "white"
+                selectedTextColor: Material.color(Material.accent)
+                selectionColor: Material.color(Material.accent)
+
+                font.pixelSize: 15
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+                font.bold: false
+                font.italic: true
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+        }
+
+        RowLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.4
+
+                text: qsTr("Stupidity:")
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+                Layout.fillHeight: true
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            SpinBox {
+                id: stupidityWidget
+
+                height: nameWidget.height
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.5
+
+                from: 1
+
+                editable: true
+                validator: IntValidator {}
+
+                onValueChanged: {
+                    if (value < 1)
+                        value = 1
+
+                    if (value > to)
+                        value = to
                 }
 
-                TextEdit {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.5
-                    Layout.fillHeight: true
+                onValueModified: {
+                    if (value < 1)
+                        value = 1
 
-                    color: "white"
-                    selectedTextColor: Material.color(Material.accent)
-                    selectionColor: Material.color(Material.accent)
+                    if (value > to)
+                        value = to
+                }
+            }
+        }
 
-                    text: "kek"
-                    font.pixelSize: 15
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
-                    font.bold: false
-                    font.italic: true
+        RowLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.4
+
+                text: qsTr("Cell:")
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+                Layout.fillHeight: true
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            SpinBox {
+                id: cellWidget
+
+                function configure(cellsCount) {
+                    to = cellsCount
+                    validator.top = cellsCount
+                }
+
+                height: nameWidget.height
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.5
+
+                editable: true
+                validator: IntValidator {
+                    id: cellWidgetValidator
+                }
+
+                onValueModified: {
+                    if (value > to)
+                        value = to
+                }
+
+                onValueChanged: {
+                    if (value > to)
+                        value = to
+                }
+            }
+        }
+
+        RowLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            Label {
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.4
+                Layout.fillHeight: true
+
+                text: qsTr("Age:")
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+
+            Label {
+                id: ageWidget
+
+                Layout.fillWidth: true
+                Layout.minimumWidth: parent.width * 0.5
+
+                height: nameWidget.height
+
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+                color: Material.color(Material.Grey)
+
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+            }
+        }
+
+        RowLayout {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            Button {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                text: qsTr("Apply")
+
+                onClicked: {
+
                 }
             }
 
-            RowLayout {
+            Button {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                text: qsTr("Cancel")
 
-                Label {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.4
-                    Layout.fillHeight: true
-
-                    text: qsTr("Age:")
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
-
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.5
-                    Layout.fillHeight: true
-
-                    text: qsTr("KEK")
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
-
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-            }
-
-            RowLayout {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.4
-
-                    text: qsTr("Stupidity:")
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
-
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                SpinBox {
-                    id: capacitySpinBox
-
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.5
-
-                    editable: true
-                    validator: IntValidator {
-                        bottom: 1
-                        top: 10
-                    }
-
-                    onValueChanged: {
-                        if (value < 1)
-                            value = 1
-
-                        if (value > 10)
-                            value = 10
-                    }
-                }
-            }
-
-            RowLayout {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-
-                Label {
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.4
-
-                    text: qsTr("Cell:")
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WordWrap
-
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
-                }
-
-                SpinBox {
-                    id: cellChooser
-
-                    Layout.fillWidth: true
-                    Layout.minimumWidth: parent.width * 0.5
-
-                    editable: true
-                    validator: IntValidator {
-                        bottom: 1
-                        top: 10
-                    }
-
-                    onValueChanged: {
-                        if (value < 1)
-                            value = 1
-
-                        if (value > 10)
-                            value = 10
-                    }
-                }
-            }
-
-            Rectangle {
-                Layout.fillHeight: true
-                Layout.fillWidth: true
-                opacity: 0
+                onClicked: close()
             }
         }
     }
