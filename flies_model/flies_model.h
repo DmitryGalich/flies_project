@@ -24,7 +24,11 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
     NameRole,
     AgeRole,
     CellRole,
-    IconRole
+    IconRole,
+    XRole,
+    YRole,
+    WidthRole,
+    HeightRole
   };
 
   FliesModel(const std::string& qml_title,

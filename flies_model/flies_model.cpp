@@ -31,8 +31,18 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
     return flies_holder_.flies_.at(index.row()).GetAge();
   else if (role == CellRole)
     return flies_holder_.flies_.at(index.row()).GetCellId();
+
   else if (role == IconRole)
     return flies_holder_.flies_.at(index.row()).GetIconPath().c_str();
+
+  else if (role == XRole)
+    return flies_holder_.flies_.at(index.row()).GetX();
+  else if (role == YRole)
+    return flies_holder_.flies_.at(index.row()).GetY();
+  else if (role == WidthRole)
+    return flies_holder_.flies_.at(index.row()).GetWidth();
+  else if (role == HeightRole)
+    return flies_holder_.flies_.at(index.row()).GetHeight();
 
   return QVariant();
 }
@@ -75,6 +85,11 @@ QHash<int, QByteArray> FliesModel::roleNames() const {
   roles[AgeRole] = "flyAge";
   roles[CellRole] = "flyCell";
   roles[IconRole] = "flyIcon";
+
+  roles[XRole] = "flyX";
+  roles[YRole] = "flyY";
+  roles[WidthRole] = "flyWidth";
+  roles[HeightRole] = "flyHeight";
 
   return roles;
 }

@@ -34,7 +34,26 @@ class Fly : public QObject {
 
   std::string GetIconPath();
 
+  int GetX() const;
+  void SetX(const int x);
+
+  int GetY() const;
+  void SetY(const int y);
+
+  int GetWidth() const;
+  void SetWidth(const int width);
+
+  int GetHeight() const;
+  void SetHeight(const int height);
+
  private:
+  struct PositionInfo {
+    int x_;
+    int y_;
+    int width_;
+    int height_;
+  } position_info_;
+
   std::string icon_path_;
 
   int stupidity_;

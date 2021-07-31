@@ -26,6 +26,7 @@ Fly::Fly(const std::string& name,
 
 Fly::Fly(const Fly& fly)
     : QObject(fly.parent()),
+      position_info_(fly.position_info_),
       icon_path_(fly.icon_path_),
       stupidity_(fly.stupidity_),
       age_(fly.age_),
@@ -39,6 +40,7 @@ Fly Fly::operator=(const Fly& fly) {
   icon_path_ = fly.icon_path_;
   name_ = fly.name_;
   stupidity_ = fly.stupidity_;
+  position_info_ = fly.position_info_;
 
   return *this;
 }
@@ -81,6 +83,38 @@ int Fly::GetCellId() const {
 
 std::string Fly::GetIconPath() {
   return icon_path_;
+}
+
+int Fly::GetX() const {
+  return position_info_.x_;
+}
+
+void Fly::SetX(const int x) {
+  position_info_.x_ = x;
+}
+
+int Fly::GetY() const {
+  return position_info_.y_;
+}
+
+void Fly::SetY(const int y) {
+  position_info_.y_ = y;
+}
+
+int Fly::GetWidth() const {
+  return position_info_.width_;
+}
+
+void Fly::SetWidth(const int width) {
+  position_info_.width_ = width;
+}
+
+int Fly::GetHeight() const {
+  return position_info_.height_;
+}
+
+void Fly::SetHeight(const int height) {
+  position_info_.height_ = height;
 }
 
 void Fly::Run() {
