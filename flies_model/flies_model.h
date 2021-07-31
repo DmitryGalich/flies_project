@@ -1,6 +1,7 @@
 #ifndef FLIES_MODEL
 #define FLIES_MODEL
 
+#include <functional>
 #include <memory>
 
 #include <QAbstractListModel>
@@ -12,17 +13,14 @@
 class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
-  Q_PROPERTY(int fliesCount READ getFliesCount NOTIFY fliesCountChanged)
-
- signals:
-  void fliesCountChanged();
-
  public:
-  enum AnimalRoles { StupidityRole = Qt::UserRole + 1, NameRole };
+  enum Roles { StupidityRole = Qt::UserRole + 1, NameRole };
 
   FliesModel(const std::string& qml_title,
-            std::vector<Fly>& flies,
-            QObject* parent = nullptr);
+             std::vector<Fly>& flies,
+             const std::function<void()> run_session_function,
+             const std::function<void()> stop_session_function,
+             QObject* parent = nullptr);
   virtual ~FliesModel() override;
 
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -30,13 +28,14 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
                 int role = Qt::DisplayRole) const override;
 
  protected:
-  Q_INVOKABLE void setFlyStupidity(const int index, const int stupidity);
-  Q_INVOKABLE void setFlyName(const int index, const QString& name);
-  Q_INVOKABLE void setFliesCount(const int count);
-
-  int getFliesCount() const;
+  Q_INVOKABLE void runSession();
+  Q_INVOKABLE void stopSession();
 
   QHash<int, QByteArray> roleNames() const override;
+
+ private:
+  const std::function<void()> kRunSession_;
+  const std::function<void()> kStopSession_;
 
   std::vector<Fly>& flies_;
 };

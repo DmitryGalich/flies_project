@@ -13,7 +13,7 @@ RowLayout {
         icon.color: Material.color(Material.Green)
 
         onClicked: {
-
+            FliesModel.runSession()
         }
     }
 
@@ -24,7 +24,7 @@ RowLayout {
         icon.color: Material.color(Material.Red)
 
         onClicked: {
-
+            FliesModel.stopSession()
         }
     }
 

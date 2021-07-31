@@ -59,6 +59,26 @@ Rectangle {
         }
     }
 
+    GridView {
+        id: flies
+        anchors.fill: parent
+        boundsBehavior: Flickable.StopAtBounds
+        model: FliesModel
+
+        delegate: StackLayout {
+            id: fly
+
+            Image {
+                source: "res/fly_0.png"
+                sourceSize.height: 50
+                sourceSize.width: 30
+            }
+
+            //            width: board.width
+            //            height: board.height
+        }
+    }
+
     MouseArea {
         id: cellsArea
 

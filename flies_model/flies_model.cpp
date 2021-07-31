@@ -4,9 +4,13 @@
 
 FliesModel::FliesModel(const std::string& qml_title,
                        std::vector<Fly>& flies,
+                       const std::function<void()> run_session_function,
+                       const std::function<void()> stop_session_function,
                        QObject* parent)
     : QAbstractListModel(parent),
       AbstractQMLHandler(qml_title),
+      kRunSession_(run_session_function),
+      kStopSession_(stop_session_function),
       flies_(flies) {}
 
 FliesModel::~FliesModel() {}
@@ -28,22 +32,12 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
   return QVariant();
 }
 
-void FliesModel::setFlyStupidity(const int index, const int stupidity) {
-  flies_[index].SetStupidity(stupidity);
+void FliesModel::runSession() {
+  kRunSession_();
 }
 
-void FliesModel::setFlyName(const int index, const QString& name) {
-  flies_[index].SetName(name.toStdString());
-}
-
-void FliesModel::setFliesCount(const int count) {
-  beginResetModel();
-  flies_.resize(count);
-  endResetModel();
-}
-
-int FliesModel::getFliesCount() const {
-  return flies_.size();
+void FliesModel::stopSession() {
+  kStopSession_();
 }
 
 QHash<int, QByteArray> FliesModel::roleNames() const {

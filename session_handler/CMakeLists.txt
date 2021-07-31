@@ -1,10 +1,10 @@
-set(TARGET_TITLE data_holder)
+set(TARGET_TITLE session_handler)
 
 add_library(${TARGET_TITLE}
    ${TARGET_TITLE}.cpp
    ${TARGET_TITLE}.h)
 
-add_library(Backend::DataHolder ALIAS ${TARGET_TITLE})
+add_library(Backend::SessionHandler ALIAS ${TARGET_TITLE})
 
 target_include_directories(${TARGET_TITLE}
     PUBLIC

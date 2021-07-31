@@ -7,15 +7,15 @@
 #include <QQmlContext>
 
 #include "board_model.h"
-#include "data_holder.h"
 #include "flies_model.h"
+#include "session_handler.h"
 
 class QMLEngineConfigurator : public QObject {
   Q_OBJECT
 
  public:
   QMLEngineConfigurator(QQmlContext* context,
-                        DataHolder& data_holder,
+                        SessionHandler& session_handler,
                         QObject* parent = nullptr);
   ~QMLEngineConfigurator() = default;
 

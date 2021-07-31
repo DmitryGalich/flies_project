@@ -15,8 +15,8 @@ target_link_libraries(${TARGET_TITLE}
         Qt5::Core
         Qt5::Qml
 
+        Backend::SessionHandler
     PUBLIC
         UI::FliesModel
         UI::BoardModel
-        Backend::DataHolder
 )

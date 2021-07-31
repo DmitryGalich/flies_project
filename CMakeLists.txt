@@ -17,7 +17,7 @@ add_subdirectory(fly)
 add_subdirectory(cell)
 add_subdirectory(flies_model)
 add_subdirectory(board_model)
-add_subdirectory(data_holder)
+add_subdirectory(session_handler)
 add_subdirectory(abstract_qml_handler)
 add_subdirectory(qml_engine_configurator)
 
@@ -28,7 +28,7 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE 
-        Backend::DataHolder
+        Backend::SessionHandler
         UI::QMLEngineConfigurator
 
 	Qt5::Core 

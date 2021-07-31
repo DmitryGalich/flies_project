@@ -2,8 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 
-#include "data_holder.h"
 #include "qml_engine_configurator.h"
+#include "session_handler.h"
 
 int main(int argc, char* argv[]) {
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -13,8 +13,9 @@ int main(int argc, char* argv[]) {
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
-  DataHolder data_holder;
-  QMLEngineConfigurator configurator(engine.rootContext(), data_holder, &app);
+  SessionHandler session_handler;
+  QMLEngineConfigurator configurator(engine.rootContext(), session_handler,
+                                     &app);
 
   const QUrl url(QStringLiteral("qrc:/main.qml"));
   QObject::connect(

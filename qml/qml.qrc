@@ -8,5 +8,9 @@
         <file>Board.qml</file>
         <file>CellSettings.qml</file>
         <file>res/close.png</file>
+        <file>res/fly_0.png</file>
+        <file>res/fly_1.png</file>
+        <file>res/fly_2.png</file>
+        <file>res/fly_3.png</file>
     </qresource>
 </RCC>
