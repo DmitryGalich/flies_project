@@ -57,7 +57,7 @@ ApplicationWindow {
         id: flySettings
 
         width: 400
-        height: 240
+        height: 260
 
         x: parent.width * 0.5 - width * 0.5
         y: parent.height * 0.5 - height * 0.5

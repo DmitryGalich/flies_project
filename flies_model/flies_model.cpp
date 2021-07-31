@@ -59,7 +59,9 @@ void FliesModel::addFly(QString name, int stupidity, int cell_id) {
   if (name.isEmpty())
     return;
 
+  beginResetModel();
   flies_.push_back({name.toStdString(), stupidity, cell_id});
+  endResetModel();
 }
 
 QHash<int, QByteArray> FliesModel::roleNames() const {

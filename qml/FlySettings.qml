@@ -234,8 +234,12 @@ Popup {
                 Layout.fillWidth: true
                 text: qsTr("Apply")
 
-                onClicked: {
+                enabled: (nameWidget.text.length > 0)
 
+                onClicked: {
+                    FliesModel.addFly(nameWidget.text, stupidityWidget.value,
+                                      cellWidget.value)
+                    onClicked: close()
                 }
             }
 
