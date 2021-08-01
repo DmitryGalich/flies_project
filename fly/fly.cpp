@@ -164,3 +164,13 @@ void FliesHolder::SetRequestCellPositionInfo(
     const std::function<PositionInfo(const int)> request) {
   request_cell_position_info_ = request;
 }
+
+void FliesHolder::SetRequestPossibleCellsToMove(
+    const std::function<std::vector<int>(const int)> request) {
+  request_possible_cells_to_move_ = request;
+}
+
+void FliesHolder::SetRequestFlyReplacement(
+    const std::function<bool(const int, const int)> request) {
+  request_fly_replacement_ = request;
+}

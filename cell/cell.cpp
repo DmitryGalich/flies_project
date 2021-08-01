@@ -76,3 +76,12 @@ bool CellsHolder::AddFlyToCell(const size_t cell_index) {
   cells_.at(cell_index).AddFly();
   return true;
 }
+
+std::vector<int> CellsHolder::GetPossibleCellsToMove(const int /*cell_index*/) {
+  return {};
+}
+
+bool CellsHolder::ReplaceFly(const int /*current_cell_index*/,
+                             const int /*new_cell_index*/) {
+  return true;
+}

@@ -44,6 +44,10 @@ class CellsHolder {
 
   bool AddFlyToCell(const size_t cell_index);
 
+  std::vector<int> GetPossibleCellsToMove(const int cell_index);
+
+  bool ReplaceFly(const int current_cell_index, const int new_cell_index);
+
  private:
   std::vector<Cell> cells_;
 };

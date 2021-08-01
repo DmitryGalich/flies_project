@@ -84,10 +84,16 @@ class FliesHolder {
   void SetRequestFlyAdditionToCell(const std::function<bool(const int)> value);
   void SetRequestCellPositionInfo(
       const std::function<PositionInfo(const int)> request);
+  void SetRequestPossibleCellsToMove(
+      const std::function<std::vector<int>(const int)> request);
+  void SetRequestFlyReplacement(
+      const std::function<bool(const int, const int)> request);
 
  private:
   std::function<bool(const int)> add_fly_to_cell_;
   std::function<PositionInfo(const int)> request_cell_position_info_;
+  std::function<std::vector<int>(const int)> request_possible_cells_to_move_;
+  std::function<bool(const int, const int)> request_fly_replacement_;
 
   std::vector<Fly> flies_;
 };
