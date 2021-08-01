@@ -64,3 +64,15 @@ int Cell::GetHeight() const {
 void Cell::SetHeight(const int height) {
   height_ = height;
 }
+
+Cell& CellsHolder::GetCell(const size_t index) {
+  return cells_.at(index);
+}
+
+int CellsHolder::GetCellsCount() {
+  return cells_.size();
+}
+
+void CellsHolder::SetCellsCount(const size_t count) {
+  cells_.resize(count);
+}

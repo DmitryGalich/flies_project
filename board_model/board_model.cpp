@@ -12,25 +12,25 @@ BoardModel::BoardModel(const std::string& qml_title,
 
 int BoardModel::rowCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
-  return cells_holder_.cells_.size();
+  return cells_holder_.GetCellsCount();
 }
 
 int BoardModel::columnCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
-  return cells_holder_.cells_.size();
+  return cells_holder_.GetCellsCount();
 }
 
 QVariant BoardModel::data(const QModelIndex& index, int role) const {
   if (index.row() < 0 ||
-      index.row() >= static_cast<int>(cells_holder_.cells_.size()))
+      index.row() >= static_cast<int>(cells_holder_.GetCellsCount()))
     return QVariant();
 
   if (index.column() < 0 ||
-      index.column() >= static_cast<int>(cells_holder_.cells_.size()))
+      index.column() >= static_cast<int>(cells_holder_.GetCellsCount()))
     return QVariant();
 
   if (role == CellCapacitytRole)
-    return QString::number(cells_holder_.cells_.at(index.row()).GetCapacity());
+    return QString::number(cells_holder_.GetCell(index.row()).GetCapacity());
 
   return QVariant();
 }
@@ -39,23 +39,23 @@ bool BoardModel::setData(const QModelIndex& index,
                          const QVariant& value,
                          int role) {
   if (index.row() < 0 ||
-      index.row() >= static_cast<int>(cells_holder_.cells_.size()))
+      index.row() >= static_cast<int>(cells_holder_.GetCellsCount()))
     return false;
 
   if (index.column() < 0 ||
-      index.column() >= static_cast<int>(cells_holder_.cells_.size()))
+      index.column() >= static_cast<int>(cells_holder_.GetCellsCount()))
     return false;
 
   if (role == CellXRole)
-    cells_holder_.cells_.at(index.row()).SetX(value.toInt());
+    cells_holder_.GetCell(index.row()).SetX(value.toInt());
   else if (role == CellYRole)
-    cells_holder_.cells_.at(index.row()).SetY(value.toInt());
+    cells_holder_.GetCell(index.row()).SetY(value.toInt());
   else if (role == CellWidthRole)
-    cells_holder_.cells_.at(index.row()).SetWidth(value.toInt());
+    cells_holder_.GetCell(index.row()).SetWidth(value.toInt());
   else if (role == CellHeightRole)
-    cells_holder_.cells_.at(index.row()).SetHeight(value.toInt());
+    cells_holder_.GetCell(index.row()).SetHeight(value.toInt());
   else if (role == CellCapacitytRole)
-    cells_holder_.cells_.at(index.row()).SetCapacity(value.toInt());
+    cells_holder_.GetCell(index.row()).SetCapacity(value.toInt());
 
   dataChanged(index, index,
               {CellFliesRole, CellXRole, CellYRole, CellWidthRole,
@@ -78,29 +78,29 @@ QHash<int, QByteArray> BoardModel::roleNames() const {
 }
 
 void BoardModel::setGridSide(int value) {
-  if (std::pow(value, 2) == cells_holder_.cells_.size())
+  if (std::pow(value, 2) == cells_holder_.GetCellsCount())
     return;
 
   beginResetModel();
-  cells_holder_.cells_.resize(std::pow(value, 2));
+  cells_holder_.SetCellsCount(std::pow(value, 2));
   endResetModel();
 
   emit gridSideChanged();
 }
 
 int BoardModel::gridSide() const {
-  return std::sqrt(cells_holder_.cells_.size());
+  return std::sqrt(cells_holder_.GetCellsCount());
 }
 
 void BoardModel::openCellSettingsWindow(const int cell_index) {
-  if (static_cast<size_t>(cell_index) >= cells_holder_.cells_.size())
+  if (cell_index >= cells_holder_.GetCellsCount())
     return;
 
   emit signalTopenCellSettingWindow(
-      cell_index, cells_holder_.cells_.at(cell_index).GetCapacity());
+      cell_index, cells_holder_.GetCell(cell_index).GetCapacity());
 }
 void BoardModel::setCellCapacity(const int cell_index, const int value) {
-  if (cells_holder_.cells_.at(cell_index).GetCapacity() == value)
+  if (cells_holder_.GetCell(cell_index).GetCapacity() == value)
     return;
 
   setData(index(cell_index, 0), value, CellCapacitytRole);

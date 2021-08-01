@@ -43,6 +43,11 @@ class CellsHolder {
   CellsHolder() : cells_(9){};
   ~CellsHolder() = default;
 
+  Cell& GetCell(const size_t index);
+  int GetCellsCount();
+  void SetCellsCount(const size_t count);
+
+ private:
   std::vector<Cell> cells_;
 };
 
