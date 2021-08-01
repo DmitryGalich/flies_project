@@ -28,9 +28,6 @@ class Fly::Implementation {
   ~Implementation() = default;
   Implementation operator=(const Implementation& fly);
 
-  static std::string GetDefaultName();
-  static int GetStupidityMax();
-
   void Run();
   void Stop();
 
@@ -115,14 +112,6 @@ Fly::Implementation Fly::Implementation::operator=(const Implementation& fly) {
   position_info_ = fly.position_info_;
 
   return *this;
-}
-
-std::string Fly::Implementation::GetDefaultName() {
-  return "fly_" + std::to_string(flies_count);
-}
-
-int Fly::Implementation::GetStupidityMax() {
-  return kStupidityMax;
 }
 
 int Fly::Implementation::GetStupidity() const {

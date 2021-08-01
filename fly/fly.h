@@ -61,7 +61,7 @@ class FliesHolder {
  public:
   enum class ErrorCodes { kOk, kWrongCell };
 
-  FliesHolder() = default;
+  FliesHolder();
   FliesHolder(const FliesHolder&) = delete;
   FliesHolder& operator=(const FliesHolder&) = delete;
   ~FliesHolder() = default;
@@ -82,12 +82,8 @@ class FliesHolder {
       const std::function<bool(const int, const int)> request);
 
  private:
-  std::function<bool(const int)> add_fly_to_cell_;
-  std::function<PositionInfo(const int)> request_cell_position_info_;
-  std::function<std::vector<int>(const int)> request_possible_cells_to_move_;
-  std::function<bool(const int, const int)> request_fly_replacement_;
-
-  std::vector<Fly> flies_;
+  class Implementation;
+  std::shared_ptr<Implementation> impl_;
 };
 
 #endif
