@@ -1,7 +1,10 @@
 #include "fly.h"
 
 #include <atomic>
+#include <chrono>
 #include <iostream>
+#include <mutex>
+#include <thread>
 
 namespace {
 
@@ -31,35 +34,37 @@ class Fly::Implementation {
   void Run();
   void Stop();
 
-  int GetStupidity() const;
+  int GetStupidity();
   void SetStupidity(const int stupidity);
 
-  std::string GetName() const;
+  std::string GetName();
   void SetName(const std::string& name);
 
-  int GetAge() const;
+  int GetAge();
   void IncreaseAge();
 
-  int GetCellId() const;
+  int GetCellId();
 
   std::string GetIconPath();
 
-  int GetX() const;
+  int GetX();
   void SetX(const int x);
 
-  int GetY() const;
+  int GetY();
   void SetY(const int y);
 
-  int GetWidth() const;
+  int GetWidth();
   void SetWidth(const int width);
 
-  int GetHeight() const;
+  int GetHeight();
   void SetHeight(const int height);
 
  private:
   const std::function<PositionInfo(const int index)> kRequestCellPositionInfo_;
   const std::function<std::vector<int>(const int)> kRequestPossibleCellsToMove_;
   const std::function<bool(const int, const int)> kRequestFlyReplacement_;
+
+  void ThreadFunction();
 
   PositionInfo position_info_;
   PositionInfo cell_position_info_;
@@ -70,6 +75,10 @@ class Fly::Implementation {
   std::string name_;
   int cell_id_;
   bool is_running_{false};
+  bool is_need_stop_{false};
+
+  std::shared_ptr<std::thread> thread_;
+  std::mutex mtx_;
 };
 
 Fly::Implementation::Implementation(
@@ -99,100 +108,161 @@ Fly::Implementation::Implementation(const Implementation& fly)
       age_(fly.age_),
       name_(fly.name_),
       cell_id_(fly.cell_id_),
-      is_running_(fly.is_running_) {}
+      is_running_(fly.is_running_),
+      is_need_stop_(fly.is_need_stop_),
+      thread_(fly.thread_) {}
 
 Fly::Implementation Fly::Implementation::operator=(const Implementation& fly) {
   if (this == &fly)
     return *this;
 
-  age_ = fly.age_;
-  icon_path_ = fly.icon_path_;
-  name_ = fly.name_;
-  stupidity_ = fly.stupidity_;
   position_info_ = fly.position_info_;
+  cell_position_info_ = fly.cell_position_info_;
+  icon_path_ = fly.icon_path_;
+  stupidity_ = fly.stupidity_;
+  age_ = fly.age_;
+  name_ = fly.name_;
+  cell_id_ = fly.cell_id_;
+  is_running_ = fly.is_running_;
+  is_need_stop_ = fly.is_need_stop_;
+  thread_ = fly.thread_;
 
   return *this;
 }
 
-int Fly::Implementation::GetStupidity() const {
+int Fly::Implementation::GetStupidity() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return stupidity_;
 }
 
 void Fly::Implementation::SetStupidity(const int stupidity) {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   stupidity_ = stupidity;
 }
 
-std::string Fly::Implementation::GetName() const {
+std::string Fly::Implementation::GetName() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return name_;
 }
 
 void Fly::Implementation::SetName(const std::string& name) {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   name_ = name;
 }
 
-int Fly::Implementation::GetAge() const {
+int Fly::Implementation::GetAge() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return age_;
 }
 
 void Fly::Implementation::IncreaseAge() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   age_++;
 }
 
-int Fly::Implementation::GetCellId() const {
+int Fly::Implementation::GetCellId() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return cell_id_;
 }
 
 std::string Fly::Implementation::GetIconPath() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return icon_path_;
 }
 
-int Fly::Implementation::GetX() const {
+int Fly::Implementation::GetX() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return position_info_.x_;
 }
 
 void Fly::Implementation::SetX(const int x) {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   position_info_.x_ = x;
 }
 
-int Fly::Implementation::GetY() const {
+int Fly::Implementation::GetY() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return position_info_.y_;
 }
 
 void Fly::Implementation::SetY(const int y) {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   position_info_.y_ = y;
 }
 
-int Fly::Implementation::GetWidth() const {
+int Fly::Implementation::GetWidth() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return position_info_.width_;
 }
 
 void Fly::Implementation::SetWidth(const int width) {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   position_info_.width_ = width;
 }
 
-int Fly::Implementation::GetHeight() const {
+int Fly::Implementation::GetHeight() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   return position_info_.height_;
 }
 
 void Fly::Implementation::SetHeight(const int height) {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   position_info_.height_ = height;
 }
 
+void Fly::Implementation::ThreadFunction() {
+  while (!is_need_stop_) {
+    {
+      std::lock_guard<std::mutex> guard(mtx_);
+
+      //      if (is_need_stop_)
+      //        return;
+
+      std::cout << name_ << std::endl;
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(stupidity_));
+  }
+}
+
 void Fly::Implementation::Run() {
+  std::lock_guard<std::mutex> guard(mtx_);
+
   if (is_running_)
     return;
 
+  is_need_stop_ = false;
+  thread_ = std::make_shared<std::thread>([&]() { ThreadFunction(); });
   is_running_ = true;
-
-  std::cout << name_ << " run" << std::endl;
 }
 
 void Fly::Implementation::Stop() {
-  if (!is_running_)
-    return;
-  is_running_ = false;
+  std::lock_guard<std::mutex> guard(mtx_);
 
-  std::cout << name_ << " stop" << std::endl;
+  is_need_stop_ = true;
+
+  if (!thread_->joinable())
+    return;
+
+  thread_->join();
+  thread_.reset();
+
+  is_running_ = false;
 }
 
 // ==============================================================

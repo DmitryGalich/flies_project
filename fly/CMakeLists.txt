@@ -12,6 +12,8 @@ target_include_directories(${TARGET_TITLE}
         ${CMAKE_CURRENT_LIST_DIR})
 
 target_link_libraries(${TARGET_TITLE}
+    PRIVATE
+        Threads::Threads
    PUBLIC
-     Qt5::Core
-     Backend::Support)
+        Qt5::Core
+        Backend::Support)
