@@ -17,9 +17,7 @@ class Fly {
       const std::function<std::vector<int>(const int)>
           request_possible_cells_to_move,
       const std::function<bool(const int, const int)> request_fly_replacement);
-  Fly(const Fly& fly);
   ~Fly() = default;
-  Fly operator=(const Fly& fly);
 
   static std::string GetDefaultName();
   static int GetStupidityMax();

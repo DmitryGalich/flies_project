@@ -27,9 +27,7 @@ class Fly::Implementation {
       const std::function<std::vector<int>(const int)>
           request_possible_cells_to_move,
       const std::function<bool(const int, const int)> request_fly_replacement);
-  Implementation(const Implementation& fly);
   ~Implementation() = default;
-  Implementation operator=(const Implementation& fly);
 
   void Run();
   void Stop();
@@ -67,14 +65,13 @@ class Fly::Implementation {
   void ThreadFunction();
 
   PositionInfo position_info_;
-  PositionInfo cell_position_info_;
+  //  PositionInfo cell_position_info_;
 
   std::string icon_path_;
   int stupidity_;
   int age_{0};
   std::string name_;
   int cell_id_;
-  bool is_running_{false};
   bool is_need_stop_{false};
 
   std::shared_ptr<std::thread> thread_;
@@ -96,39 +93,6 @@ Fly::Implementation::Implementation(
       stupidity_(stupidity),
       name_(name),
       cell_id_(cell_id) {}
-
-Fly::Implementation::Implementation(const Implementation& fly)
-    : kRequestCellPositionInfo_(fly.kRequestCellPositionInfo_),
-      kRequestPossibleCellsToMove_(fly.kRequestPossibleCellsToMove_),
-      kRequestFlyReplacement_(fly.kRequestFlyReplacement_),
-      position_info_(fly.position_info_),
-      cell_position_info_(fly.cell_position_info_),
-      icon_path_(fly.icon_path_),
-      stupidity_(fly.stupidity_),
-      age_(fly.age_),
-      name_(fly.name_),
-      cell_id_(fly.cell_id_),
-      is_running_(fly.is_running_),
-      is_need_stop_(fly.is_need_stop_),
-      thread_(fly.thread_) {}
-
-Fly::Implementation Fly::Implementation::operator=(const Implementation& fly) {
-  if (this == &fly)
-    return *this;
-
-  position_info_ = fly.position_info_;
-  cell_position_info_ = fly.cell_position_info_;
-  icon_path_ = fly.icon_path_;
-  stupidity_ = fly.stupidity_;
-  age_ = fly.age_;
-  name_ = fly.name_;
-  cell_id_ = fly.cell_id_;
-  is_running_ = fly.is_running_;
-  is_need_stop_ = fly.is_need_stop_;
-  thread_ = fly.thread_;
-
-  return *this;
-}
 
 int Fly::Implementation::GetStupidity() {
   std::lock_guard<std::mutex> guard(mtx_);
@@ -231,27 +195,27 @@ void Fly::Implementation::ThreadFunction() {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
-      //      if (is_need_stop_)
-      //        return;
-
-      std::cout << name_ << std::endl;
+      std::cout << std::this_thread::get_id() << " : " << name_ << std::endl;
     }
     std::this_thread::sleep_for(std::chrono::seconds(stupidity_));
   }
 }
 
 void Fly::Implementation::Run() {
+  std::cout << std::this_thread::get_id() << " : Run" << std::endl;
+
   std::lock_guard<std::mutex> guard(mtx_);
 
-  if (is_running_)
-    return;
-
+  thread_.reset(new std::thread([&]() { ThreadFunction(); }));
   is_need_stop_ = false;
-  thread_ = std::make_shared<std::thread>([&]() { ThreadFunction(); });
-  is_running_ = true;
 }
 
 void Fly::Implementation::Stop() {
+  std::cout << std::this_thread::get_id() << " : Stop" << std::endl;
+
+  if (!thread_)
+    return;
+
   std::lock_guard<std::mutex> guard(mtx_);
 
   is_need_stop_ = true;
@@ -261,8 +225,6 @@ void Fly::Implementation::Stop() {
 
   thread_->join();
   thread_.reset();
-
-  is_running_ = false;
 }
 
 // ==============================================================
@@ -281,15 +243,6 @@ Fly::Fly(
                                              request_cell_position_info,
                                              request_possible_cells_to_move,
                                              request_fly_replacement)) {}
-
-Fly::Fly(const Fly& fly) : impl_(fly.impl_) {}
-
-Fly Fly::operator=(const Fly& fly) {
-  if (this == &fly)
-    return *this;
-  impl_ = fly.impl_;
-  return *this;
-}
 
 std::string Fly::GetDefaultName() {
   return "fly_" + std::to_string(flies_count);
