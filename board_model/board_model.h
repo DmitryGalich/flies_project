@@ -31,7 +31,7 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
   };
 
   BoardModel(const std::string& qml_title,
-             std::vector<Cell>& cells,
+             CellsHolder& cells,
              QObject* parent = nullptr);
   virtual ~BoardModel() override = default;
 
@@ -54,7 +54,7 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_INVOKABLE void setCellCapacity(const int cell_index, const int value);
 
  private:
-  std::vector<Cell>& cells_;
+  CellsHolder& cells_holder_;
 };
 
 #endif

@@ -8,15 +8,15 @@
 
 class SessionHandler {
  public:
-  SessionHandler() : cells_(9) {}
+  SessionHandler() = default;
   ~SessionHandler() = default;
 
   FliesHolder& GetFlies();
-  std::vector<Cell>& GetCells();
+  CellsHolder& GetCells();
 
  private:
   FliesHolder flies_;
-  std::vector<Cell> cells_;
+  CellsHolder cells_;
 };
 
 #endif

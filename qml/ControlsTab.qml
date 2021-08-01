@@ -7,7 +7,7 @@ import QtQuick.Controls 2.13
 
 RowLayout {
     Button {
-        id: playButton
+        id: runButton
 
         icon.source: "res/play.png"
         icon.color: Material.color(Material.Green)

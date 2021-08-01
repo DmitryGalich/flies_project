@@ -1,6 +1,8 @@
 #ifndef CELL
 #define CELL
 
+#include <vector>
+
 class Cell {
  public:
   Cell(const int capacity = 5);
@@ -34,6 +36,14 @@ class Cell {
   int y_;
   int width_;
   int height_;
+};
+
+class CellsHolder {
+ public:
+  CellsHolder() : cells_(9){};
+  ~CellsHolder() = default;
+
+  std::vector<Cell> cells_;
 };
 
 #endif

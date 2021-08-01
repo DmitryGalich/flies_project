@@ -6,7 +6,7 @@ QMLEngineConfigurator::QMLEngineConfigurator(QQmlContext* context,
     : QObject(parent), context_(context) {
   flies_model_.reset(new FliesModel(
       "FliesModel", session_handler.GetFlies(),
-      [&]() { return session_handler.GetCells().size(); }, this));
+      [&]() { return session_handler.GetCells().cells_.size(); }, this));
   context_->setContextProperty(flies_model_->GetQmlTitle().c_str(),
                                flies_model_.get());
 

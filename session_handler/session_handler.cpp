@@ -6,6 +6,6 @@ FliesHolder& SessionHandler::GetFlies() {
   return flies_;
 }
 
-std::vector<Cell>& SessionHandler::GetCells() {
+CellsHolder &SessionHandler::GetCells() {
   return cells_;
 }
