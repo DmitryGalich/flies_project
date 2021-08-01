@@ -3,11 +3,11 @@
 
 #include "support.h"
 
-#include <QObject>
+#include <functional>
+#include <memory>
+#include <vector>
 
-class Fly : public QObject {
-  Q_OBJECT
-
+class Fly {
  public:
   Fly(const std::string& name,
       const int stupidity,
@@ -16,10 +16,9 @@ class Fly : public QObject {
           request_cell_position_info,
       const std::function<std::vector<int>(const int)>
           request_possible_cells_to_move,
-      const std::function<bool(const int, const int)> request_fly_replacement,
-      QObject* parent = nullptr);
+      const std::function<bool(const int, const int)> request_fly_replacement);
   Fly(const Fly& fly);
-  virtual ~Fly() override = default;
+  ~Fly() = default;
   Fly operator=(const Fly& fly);
 
   static std::string GetDefaultName();
@@ -54,19 +53,8 @@ class Fly : public QObject {
   void SetHeight(const int height);
 
  private:
-  const std::function<PositionInfo(const int index)> kRequestCellPositionInfo_;
-  const std::function<std::vector<int>(const int)> kRequestPossibleCellsToMove_;
-  const std::function<bool(const int, const int)> kRequestFlyReplacement_;
-
-  PositionInfo position_info_;
-  PositionInfo cell_position_info_;
-
-  std::string icon_path_;
-  int stupidity_;
-  int age_{0};
-  std::string name_;
-  int cell_id_;
-  bool is_running_{false};
+  class Implementation;
+  std::shared_ptr<Implementation> impl_;
 };
 
 class FliesHolder {

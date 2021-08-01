@@ -2,6 +2,7 @@ set(TARGET_TITLE fly)
 
 add_library(${TARGET_TITLE}
    ${TARGET_TITLE}.cpp
+   flies_holder.cpp
    ${TARGET_TITLE}.h)
 
 add_library(Backend::Fly ALIAS ${TARGET_TITLE})
