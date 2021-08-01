@@ -30,6 +30,7 @@ class Fly::Implementation {
   ~Implementation() = default;
 
   void Run();
+  void RequestStop();
   void Stop();
 
   int GetStupidity();
@@ -62,10 +63,9 @@ class Fly::Implementation {
   const std::function<std::vector<int>(const int)> kRequestPossibleCellsToMove_;
   const std::function<bool(const int, const int)> kRequestFlyReplacement_;
 
-  void ThreadFunction();
+  void FlyingFunction();
 
   PositionInfo position_info_;
-  //  PositionInfo cell_position_info_;
 
   std::string icon_path_;
   int stupidity_;
@@ -190,13 +190,27 @@ void Fly::Implementation::SetHeight(const int height) {
   position_info_.height_ = height;
 }
 
-void Fly::Implementation::ThreadFunction() {
+void Fly::Implementation::FlyingFunction() {
   while (!is_need_stop_) {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
       std::cout << std::this_thread::get_id() << " : " << name_ << std::endl;
+
+      //      PositionInfo cell_position_info =
+      //      kRequestCellPositionInfo_(cell_id_);
+
+      //      std::cout << " x: " << cell_position_info.x_
+      //                << " y: " << cell_position_info.y_
+      //                << " width: " << cell_position_info.width_
+      //                << " height: " << cell_position_info.height_ <<
+      //                std::endl;
+
+      //      position_info_.x_++;
+      //      position_info_.y_++;
     }
+
+    //    std::this_thread::sleep_for(std::chrono::milliseconds(16));
     std::this_thread::sleep_for(std::chrono::seconds(stupidity_));
   }
 }
@@ -206,12 +220,12 @@ void Fly::Implementation::Run() {
 
   std::lock_guard<std::mutex> guard(mtx_);
 
-  thread_.reset(new std::thread([&]() { ThreadFunction(); }));
+  thread_.reset(new std::thread([&]() { FlyingFunction(); }));
   is_need_stop_ = false;
 }
 
-void Fly::Implementation::Stop() {
-  std::cout << std::this_thread::get_id() << " : Stop" << std::endl;
+void Fly::Implementation::RequestStop() {
+  std::cout << std::this_thread::get_id() << " : Request stop" << std::endl;
 
   if (!thread_)
     return;
@@ -219,6 +233,13 @@ void Fly::Implementation::Stop() {
   std::lock_guard<std::mutex> guard(mtx_);
 
   is_need_stop_ = true;
+}
+
+void Fly::Implementation::Stop() {
+  std::cout << std::this_thread::get_id() << " : Stop" << std::endl;
+
+  if (!thread_)
+    return;
 
   if (!thread_->joinable())
     return;
@@ -318,6 +339,10 @@ void Fly::SetHeight(const int height) {
 
 void Fly::Run() {
   impl_->Run();
+}
+
+void Fly::RequestStop() {
+  impl_->RequestStop();
 }
 
 void Fly::Stop() {

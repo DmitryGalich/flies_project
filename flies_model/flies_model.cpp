@@ -48,7 +48,8 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
 }
 
 void FliesModel::runSession() {
-  flies_holder_.Run();
+  if (!flies_holder_.Run())
+    return;
 }
 
 void FliesModel::stopSession() {

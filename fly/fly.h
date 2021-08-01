@@ -23,6 +23,7 @@ class Fly {
   static int GetStupidityMax();
 
   void Run();
+  void RequestStop();
   void Stop();
 
   int GetStupidity() const;

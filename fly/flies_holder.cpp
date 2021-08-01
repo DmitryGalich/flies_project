@@ -62,6 +62,9 @@ bool FliesHolder::Implementation::Run() {
 
 void FliesHolder::Implementation::Stop() {
   for (auto& fly : flies_)
+    fly.RequestStop();
+
+  for (auto& fly : flies_)
     fly.Stop();
 }
 
