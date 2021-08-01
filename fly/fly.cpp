@@ -124,3 +124,22 @@ void Fly::Run() {
 void Fly::Stop() {
   std::cout << name_ << " stop" << std::endl;
 }
+
+FliesHolder::ErrorCodes FliesHolder::AddFly(Fly fly) {
+  flies_.push_back(fly);
+  return ErrorCodes::kOk;
+}
+
+Fly& FliesHolder::GetFly(const size_t index) {
+  return flies_.at(index);
+}
+
+int FliesHolder::GetFliesCount() {
+  return flies_.size();
+}
+
+bool FliesHolder::Run() {
+  return true;
+}
+
+void FliesHolder::Stop() {}

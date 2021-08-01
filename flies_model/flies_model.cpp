@@ -15,46 +15,44 @@ FliesModel::~FliesModel() {}
 
 int FliesModel::rowCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
-  return flies_holder_.flies_.size();
+  return flies_holder_.GetFliesCount();
 }
 
 QVariant FliesModel::data(const QModelIndex& index, int role) const {
   if (index.row() < 0 ||
-      index.row() >= static_cast<int>(flies_holder_.flies_.size()))
+      index.row() >= static_cast<int>(flies_holder_.GetFliesCount()))
     return QVariant();
 
   if (role == StupidityRole)
-    return flies_holder_.flies_.at(index.row()).GetStupidity();
+    return flies_holder_.GetFly(index.row()).GetStupidity();
   else if (role == NameRole)
-    return flies_holder_.flies_.at(index.row()).GetName().c_str();
+    return flies_holder_.GetFly(index.row()).GetName().c_str();
   else if (role == AgeRole)
-    return flies_holder_.flies_.at(index.row()).GetAge();
+    return flies_holder_.GetFly(index.row()).GetAge();
   else if (role == CellRole)
-    return flies_holder_.flies_.at(index.row()).GetCellId();
+    return flies_holder_.GetFly(index.row()).GetCellId();
 
   else if (role == IconRole)
-    return flies_holder_.flies_.at(index.row()).GetIconPath().c_str();
+    return flies_holder_.GetFly(index.row()).GetIconPath().c_str();
 
   else if (role == XRole)
-    return flies_holder_.flies_.at(index.row()).GetX();
+    return flies_holder_.GetFly(index.row()).GetX();
   else if (role == YRole)
-    return flies_holder_.flies_.at(index.row()).GetY();
+    return flies_holder_.GetFly(index.row()).GetY();
   else if (role == WidthRole)
-    return flies_holder_.flies_.at(index.row()).GetWidth();
+    return flies_holder_.GetFly(index.row()).GetWidth();
   else if (role == HeightRole)
-    return flies_holder_.flies_.at(index.row()).GetHeight();
+    return flies_holder_.GetFly(index.row()).GetHeight();
 
   return QVariant();
 }
 
 void FliesModel::runSession() {
-  for (auto& fly : flies_holder_.flies_)
-    fly.Run();
+  flies_holder_.Run();
 }
 
 void FliesModel::stopSession() {
-  for (auto& fly : flies_holder_.flies_)
-    fly.Stop();
+  flies_holder_.Stop();
 }
 
 void FliesModel::signalizeToOpenFlySettingsWindow() {
@@ -73,7 +71,10 @@ void FliesModel::addFly(QString name, int stupidity, int cell_id) {
     return;
 
   beginResetModel();
-  flies_holder_.flies_.push_back({name.toStdString(), stupidity, cell_id});
+  auto status = flies_holder_.AddFly({name.toStdString(), stupidity, cell_id});
+  if (status == FliesHolder::ErrorCodes::kWrongCell) {
+    std::cout << "Wrong cell" << std::endl;
+  }
   endResetModel();
 }
 

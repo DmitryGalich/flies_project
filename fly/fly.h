@@ -66,9 +66,19 @@ class Fly : public QObject {
 
 class FliesHolder {
  public:
+  enum class ErrorCodes { kOk, kWrongCell };
+
   FliesHolder() = default;
   ~FliesHolder() = default;
 
+  ErrorCodes AddFly(Fly fly);
+  Fly& GetFly(const size_t index);
+  int GetFliesCount();
+
+  bool Run();
+  void Stop();
+
+ private:
   std::vector<Fly> flies_;
 };
 
