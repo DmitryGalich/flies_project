@@ -8,15 +8,15 @@
 
 class SessionHandler {
  public:
-  SessionHandler() = default;
+  SessionHandler();
   ~SessionHandler() = default;
 
   FliesHolder& GetFlies();
   CellsHolder& GetCells();
 
  private:
-  FliesHolder flies_;
-  CellsHolder cells_;
+  FliesHolder flies_holder_;
+  CellsHolder cells_holder_;
 };
 
 #endif

@@ -76,3 +76,16 @@ int CellsHolder::GetCellsCount() {
 void CellsHolder::SetCellsCount(const size_t count) {
   cells_.resize(count);
 }
+
+bool CellsHolder::AddFlyToCell(const size_t cell_index) {
+  if (cell_index >= cells_.size())
+    return false;
+
+  if (cells_.at(cell_index).GetFliesCount() >=
+      cells_.at(cell_index).GetCapacity())
+    return false;
+
+  cells_.at(cell_index).AddFly();
+
+  return true;
+}

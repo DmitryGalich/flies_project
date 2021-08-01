@@ -2,10 +2,15 @@
 
 #include <iostream>
 
-FliesHolder& SessionHandler::GetFlies() {
-  return flies_;
+SessionHandler::SessionHandler() {
+  flies_holder_.SetRequestFlyAdditionToCell(
+      [&](int cell_index) { return cells_holder_.AddFlyToCell(cell_index); });
 }
 
-CellsHolder &SessionHandler::GetCells() {
-  return cells_;
+FliesHolder& SessionHandler::GetFlies() {
+  return flies_holder_;
+}
+
+CellsHolder& SessionHandler::GetCells() {
+  return cells_holder_;
 }

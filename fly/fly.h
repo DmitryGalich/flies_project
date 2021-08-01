@@ -69,6 +69,8 @@ class FliesHolder {
   enum class ErrorCodes { kOk, kWrongCell };
 
   FliesHolder() = default;
+  FliesHolder(const FliesHolder&) = delete;
+  FliesHolder& operator=(const FliesHolder&) = delete;
   ~FliesHolder() = default;
 
   ErrorCodes AddFly(Fly fly);
@@ -78,7 +80,11 @@ class FliesHolder {
   bool Run();
   void Stop();
 
+  void SetRequestFlyAdditionToCell(const std::function<bool(int)> request);
+
  private:
+  std::function<bool(int)> add_fly_to_cell_;
+
   std::vector<Fly> flies_;
 };
 

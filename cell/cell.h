@@ -41,11 +41,15 @@ class Cell {
 class CellsHolder {
  public:
   CellsHolder() : cells_(9){};
+  CellsHolder(const CellsHolder&) = delete;
+  CellsHolder& operator=(const CellsHolder&) = delete;
   ~CellsHolder() = default;
 
   Cell& GetCell(const size_t index);
   int GetCellsCount();
   void SetCellsCount(const size_t count);
+
+  bool AddFlyToCell(const size_t cell_index);
 
  private:
   std::vector<Cell> cells_;

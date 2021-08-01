@@ -126,6 +126,9 @@ void Fly::Stop() {
 }
 
 FliesHolder::ErrorCodes FliesHolder::AddFly(Fly fly) {
+  if (!add_fly_to_cell_(fly.GetCellId()))
+    return ErrorCodes::kWrongCell;
+
   flies_.push_back(fly);
   return ErrorCodes::kOk;
 }
@@ -143,3 +146,8 @@ bool FliesHolder::Run() {
 }
 
 void FliesHolder::Stop() {}
+
+void FliesHolder::SetRequestFlyAdditionToCell(
+    const std::function<bool(int)> request) {
+  add_fly_to_cell_ = request;
+}
