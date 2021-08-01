@@ -62,12 +62,11 @@ class Fly : public QObject {
   PositionInfo cell_position_info_;
 
   std::string icon_path_;
-
   int stupidity_;
-  int age_;
+  int age_{0};
   std::string name_;
-
   int cell_id_;
+  bool is_running_{false};
 };
 
 class FliesHolder {

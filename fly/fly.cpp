@@ -28,7 +28,6 @@ Fly::Fly(
       kRequestFlyReplacement_(request_fly_replacement),
       icon_path_(kIconPaths.at(flies_count++ % kIconPaths.size())),
       stupidity_(stupidity),
-      age_(0),
       name_(name),
       cell_id_(cell_id) {}
 
@@ -43,7 +42,8 @@ Fly::Fly(const Fly& fly)
       stupidity_(fly.stupidity_),
       age_(fly.age_),
       name_(fly.name_),
-      cell_id_(fly.cell_id_) {}
+      cell_id_(fly.cell_id_),
+      is_running_(fly.is_running_) {}
 
 Fly Fly::operator=(const Fly& fly) {
   if (this == &fly)
@@ -131,10 +131,19 @@ void Fly::SetHeight(const int height) {
 }
 
 void Fly::Run() {
+  if (is_running_)
+    return;
+
+  is_running_ = true;
+
   std::cout << name_ << " run" << std::endl;
 }
 
 void Fly::Stop() {
+  if (!is_running_)
+    return;
+  is_running_ = false;
+
   std::cout << name_ << " stop" << std::endl;
 }
 
@@ -160,10 +169,19 @@ int FliesHolder::GetFliesCount() {
 }
 
 bool FliesHolder::Run() {
+  if (flies_.empty())
+    return false;
+
+  for (auto& fly : flies_)
+    fly.Run();
+
   return true;
 }
 
-void FliesHolder::Stop() {}
+void FliesHolder::Stop() {
+  for (auto& fly : flies_)
+    fly.Stop();
+}
 
 void FliesHolder::SetRequestFlyAdditionToCell(
     const std::function<bool(const int)> value) {
