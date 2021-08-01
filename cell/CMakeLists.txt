@@ -10,3 +10,6 @@ target_include_directories(${TARGET_TITLE}
     PUBLIC
         ${CMAKE_CURRENT_LIST_DIR})
 
+target_link_libraries(${TARGET_TITLE}
+    PUBLIC
+        Backend::Support)

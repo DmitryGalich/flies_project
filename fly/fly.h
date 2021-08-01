@@ -1,6 +1,8 @@
 #ifndef FLY
 #define FLY
 
+#include "support.h"
+
 #include <QObject>
 
 class Fly : public QObject {
@@ -10,6 +12,7 @@ class Fly : public QObject {
   Fly(const std::string& name,
       const int stupidity,
       const int cell_id,
+      std::function<PositionInfo(const int index)> request_cell_position_info,
       QObject* parent = nullptr);
   Fly(const Fly& fly);
   virtual ~Fly() override = default;
@@ -47,18 +50,16 @@ class Fly : public QObject {
   void SetHeight(const int height);
 
  private:
-  struct PositionInfo {
-    int x_;
-    int y_;
-    int width_;
-    int height_;
-  } position_info_;
+  PositionInfo position_info_;
+  PositionInfo cell_position_info_;
 
   std::string icon_path_;
 
   int stupidity_;
   int age_;
   std::string name_;
+
+  std::function<PositionInfo(const int index)> request_cell_position_info_;
 
   // ?
   int cell_id_;
@@ -73,17 +74,20 @@ class FliesHolder {
   FliesHolder& operator=(const FliesHolder&) = delete;
   ~FliesHolder() = default;
 
-  ErrorCodes AddFly(Fly fly);
+  ErrorCodes AddFly(std::string name, int stupidity, int cell_id);
   Fly& GetFly(const size_t index);
   int GetFliesCount();
 
   bool Run();
   void Stop();
 
-  void SetRequestFlyAdditionToCell(const std::function<bool(int)> request);
+  void SetRequestFlyAdditionToCell(const std::function<bool(const int)> value);
+  void SetRequestCellPositionInfo(
+      const std::function<PositionInfo(const int)> request);
 
  private:
-  std::function<bool(int)> add_fly_to_cell_;
+  std::function<bool(const int)> add_fly_to_cell_;
+  std::function<PositionInfo(const int)> request_cell_position_info_;
 
   std::vector<Fly> flies_;
 };

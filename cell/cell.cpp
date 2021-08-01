@@ -33,36 +33,24 @@ void Cell::RemoveFly() {
   flies_count_--;
 }
 
-int Cell::GetX() const {
-  return x_;
+PositionInfo Cell::GetPositionInfo() const {
+  return position_info_;
 }
 
 void Cell::SetX(const int x) {
-  x_ = x;
-}
-
-int Cell::GetY() const {
-  return y_;
+  position_info_.x_ = x;
 }
 
 void Cell::SetY(const int y) {
-  y_ = y;
-}
-
-int Cell::GetWidth() const {
-  return width_;
+  position_info_.y_ = y;
 }
 
 void Cell::SetWidth(const int width) {
-  width_ = width;
-}
-
-int Cell::GetHeight() const {
-  return height_;
+  position_info_.width_ = width;
 }
 
 void Cell::SetHeight(const int height) {
-  height_ = height;
+  position_info_.height_ = height;
 }
 
 Cell& CellsHolder::GetCell(const size_t index) {
@@ -86,6 +74,5 @@ bool CellsHolder::AddFlyToCell(const size_t cell_index) {
     return false;
 
   cells_.at(cell_index).AddFly();
-
   return true;
 }

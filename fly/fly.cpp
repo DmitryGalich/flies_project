@@ -13,24 +13,30 @@ static const std::vector<std::string> kIconPaths{
 
 }  // namespace
 
-Fly::Fly(const std::string& name,
-         const int stupidity,
-         const int cell_id,
-         QObject* parent)
+Fly::Fly(
+    const std::string& name,
+    const int stupidity,
+    const int cell_id,
+    std::function<PositionInfo(const int index)> request_cell_position_info,
+    QObject* parent)
     : QObject(parent),
       icon_path_(kIconPaths.at(flies_count++ % kIconPaths.size())),
       stupidity_(stupidity),
       age_(0),
       name_(name),
+      request_cell_position_info_(request_cell_position_info),
       cell_id_(cell_id) {}
 
 Fly::Fly(const Fly& fly)
     : QObject(fly.parent()),
       position_info_(fly.position_info_),
+      cell_position_info_(fly.cell_position_info_),
       icon_path_(fly.icon_path_),
       stupidity_(fly.stupidity_),
       age_(fly.age_),
-      name_(fly.name_) {}
+      name_(fly.name_),
+      request_cell_position_info_(fly.request_cell_position_info_),
+      cell_id_(fly.cell_id_) {}
 
 Fly Fly::operator=(const Fly& fly) {
   if (this == &fly)
@@ -125,11 +131,13 @@ void Fly::Stop() {
   std::cout << name_ << " stop" << std::endl;
 }
 
-FliesHolder::ErrorCodes FliesHolder::AddFly(Fly fly) {
-  if (!add_fly_to_cell_(fly.GetCellId()))
+FliesHolder::ErrorCodes FliesHolder::AddFly(std::string name,
+                                            int stupidity,
+                                            int cell_id) {
+  if (!add_fly_to_cell_(cell_id))
     return ErrorCodes::kWrongCell;
 
-  flies_.push_back(fly);
+  flies_.push_back({name, stupidity, cell_id, request_cell_position_info_});
   return ErrorCodes::kOk;
 }
 
@@ -148,6 +156,11 @@ bool FliesHolder::Run() {
 void FliesHolder::Stop() {}
 
 void FliesHolder::SetRequestFlyAdditionToCell(
-    const std::function<bool(int)> request) {
-  add_fly_to_cell_ = request;
+    const std::function<bool(const int)> value) {
+  add_fly_to_cell_ = value;
+}
+
+void FliesHolder::SetRequestCellPositionInfo(
+    const std::function<PositionInfo(const int)> request) {
+  request_cell_position_info_ = request;
 }

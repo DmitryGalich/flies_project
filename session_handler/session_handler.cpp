@@ -3,8 +3,12 @@
 #include <iostream>
 
 SessionHandler::SessionHandler() {
-  flies_holder_.SetRequestFlyAdditionToCell(
-      [&](int cell_index) { return cells_holder_.AddFlyToCell(cell_index); });
+  flies_holder_.SetRequestFlyAdditionToCell([&](const int cell_index) {
+    return cells_holder_.AddFlyToCell(cell_index);
+  });
+  flies_holder_.SetRequestCellPositionInfo([&](const int cell_index) {
+    return cells_holder_.GetCell(cell_index).GetPositionInfo();
+  });
 }
 
 FliesHolder& SessionHandler::GetFlies() {

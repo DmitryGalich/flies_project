@@ -13,6 +13,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Quick QuickControls2 REQUIRED)
 
+add_subdirectory(support)
 add_subdirectory(fly)
 add_subdirectory(cell)
 add_subdirectory(flies_model)

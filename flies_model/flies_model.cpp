@@ -71,7 +71,7 @@ void FliesModel::addFly(QString name, int stupidity, int cell_id) {
     return;
 
   beginResetModel();
-  auto status = flies_holder_.AddFly({name.toStdString(), stupidity, cell_id});
+  auto status = flies_holder_.AddFly(name.toStdString(), stupidity, cell_id);
   if (status == FliesHolder::ErrorCodes::kWrongCell) {
     std::cout << "Wrong cell" << std::endl;
   }
