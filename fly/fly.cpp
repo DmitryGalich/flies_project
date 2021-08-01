@@ -17,25 +17,32 @@ Fly::Fly(
     const std::string& name,
     const int stupidity,
     const int cell_id,
-    std::function<PositionInfo(const int index)> request_cell_position_info,
+    const std::function<PositionInfo(const int)> request_cell_position_info,
+    const std::function<std::vector<int>(const int)>
+        request_possible_cells_to_move,
+    const std::function<bool(const int, const int)> request_fly_replacement,
     QObject* parent)
     : QObject(parent),
+      kRequestCellPositionInfo_(request_cell_position_info),
+      kRequestPossibleCellsToMove_(request_possible_cells_to_move),
+      kRequestFlyReplacement_(request_fly_replacement),
       icon_path_(kIconPaths.at(flies_count++ % kIconPaths.size())),
       stupidity_(stupidity),
       age_(0),
       name_(name),
-      request_cell_position_info_(request_cell_position_info),
       cell_id_(cell_id) {}
 
 Fly::Fly(const Fly& fly)
     : QObject(fly.parent()),
+      kRequestCellPositionInfo_(fly.kRequestCellPositionInfo_),
+      kRequestPossibleCellsToMove_(fly.kRequestPossibleCellsToMove_),
+      kRequestFlyReplacement_(fly.kRequestFlyReplacement_),
       position_info_(fly.position_info_),
       cell_position_info_(fly.cell_position_info_),
       icon_path_(fly.icon_path_),
       stupidity_(fly.stupidity_),
       age_(fly.age_),
       name_(fly.name_),
-      request_cell_position_info_(fly.request_cell_position_info_),
       cell_id_(fly.cell_id_) {}
 
 Fly Fly::operator=(const Fly& fly) {
@@ -131,13 +138,16 @@ void Fly::Stop() {
   std::cout << name_ << " stop" << std::endl;
 }
 
+// =================================================
+
 FliesHolder::ErrorCodes FliesHolder::AddFly(std::string name,
                                             int stupidity,
                                             int cell_id) {
   if (!add_fly_to_cell_(cell_id))
     return ErrorCodes::kWrongCell;
 
-  flies_.push_back({name, stupidity, cell_id, request_cell_position_info_});
+  flies_.push_back({name, stupidity, cell_id, request_cell_position_info_,
+                    request_possible_cells_to_move_, request_fly_replacement_});
   return ErrorCodes::kOk;
 }
 

@@ -12,7 +12,11 @@ class Fly : public QObject {
   Fly(const std::string& name,
       const int stupidity,
       const int cell_id,
-      std::function<PositionInfo(const int index)> request_cell_position_info,
+      const std::function<PositionInfo(const int index)>
+          request_cell_position_info,
+      const std::function<std::vector<int>(const int)>
+          request_possible_cells_to_move,
+      const std::function<bool(const int, const int)> request_fly_replacement,
       QObject* parent = nullptr);
   Fly(const Fly& fly);
   virtual ~Fly() override = default;
@@ -50,6 +54,10 @@ class Fly : public QObject {
   void SetHeight(const int height);
 
  private:
+  const std::function<PositionInfo(const int index)> kRequestCellPositionInfo_;
+  const std::function<std::vector<int>(const int)> kRequestPossibleCellsToMove_;
+  const std::function<bool(const int, const int)> kRequestFlyReplacement_;
+
   PositionInfo position_info_;
   PositionInfo cell_position_info_;
 
@@ -59,9 +67,6 @@ class Fly : public QObject {
   int age_;
   std::string name_;
 
-  std::function<PositionInfo(const int index)> request_cell_position_info_;
-
-  // ?
   int cell_id_;
 };
 
