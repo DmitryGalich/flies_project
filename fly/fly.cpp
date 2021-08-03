@@ -14,6 +14,10 @@ static const int kStupidityMax = 10;
 static const std::vector<std::string> kIconPaths{
     "res/fly_0.png", "res/fly_1.png", "res/fly_2.png", "res/fly_3.png"};
 
+int GenerateValueInRange(int min, int max) {
+  return min + (rand() % static_cast<int>(max - min + 1));
+};
+
 }  // namespace
 
 class Fly::Implementation {
@@ -65,14 +69,14 @@ class Fly::Implementation {
 
   void FlyingFunction();
 
-  PositionInfo position_info_{};
-
   std::string icon_path_{};
   int stupidity_{};
   int age_{0};
   std::string name_;
   int cell_id_{};
   bool is_need_stop_{false};
+  bool is_alive_{false};
+  PositionInfo position_info_{};
 
   std::shared_ptr<std::thread> thread_;
   mutable std::mutex mtx_;
@@ -92,7 +96,19 @@ Fly::Implementation::Implementation(
       icon_path_(kIconPaths.at(flies_count++ % kIconPaths.size())),
       stupidity_(stupidity),
       name_(name),
-      cell_id_(cell_id) {}
+      cell_id_(cell_id),
+      position_info_([&]() {
+        //        auto kCellPositionInfo = kRequestCellPositionInfo_(cell_id_);
+        //        int x = GenerateValueInRange(
+        //            kCellPositionInfo.x_,
+        //            kCellPositionInfo.x_ + kCellPositionInfo.width_);
+        //        int y = GenerateValueInRange(
+        //            kCellPositionInfo.y_,
+        //            kCellPositionInfo.y_ + kCellPositionInfo.height_);
+        //        return PositionInfo{x, y};
+
+        return PositionInfo{};
+      }()) {}
 
 int Fly::Implementation::GetStupidity() const {
   std::lock_guard<std::mutex> guard(mtx_);
@@ -191,31 +207,55 @@ void Fly::Implementation::SetHeight(const int height) {
 }
 
 void Fly::Implementation::FlyingFunction() {
+  int target_point_x{kRequestCellPositionInfo_(cell_id_).x_};
+  int target_point_y{kRequestCellPositionInfo_(cell_id_).y_};
+
+  bool is_x_increasing_motion{true};
+  bool is_y_increasing_motion{true};
+
+  int flying_seconds_counter{0};
+  int cycle_rounds_counter{0};
+
+  const auto CheckAxisTargetPointReaching =
+      [](bool& is_increasing_motion, int& fly_position, int& fly_size,
+         int& cell_position, int& cell_size, int& target_position) {
+        if (((fly_position >= target_position) && is_increasing_motion) ||
+            ((fly_position <= target_position) && !is_increasing_motion)) {
+          target_position = GenerateValueInRange(
+              cell_position, cell_position + cell_size - fly_size);
+
+          is_increasing_motion = (target_position > fly_position);
+        }
+      };
+
+  const auto MoveFlyOnAxis = [](bool& is_increasing_motion, int& fly_position) {
+    if (is_increasing_motion)
+      fly_position++;
+    else
+      fly_position--;
+  };
+
   while (!is_need_stop_) {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
-      //      std::cout << std::this_thread::get_id() << " : " << name_ <<
-      //      std::endl;
+      auto kCellPositionInfo{kRequestCellPositionInfo_(cell_id_)};
 
-      //      PositionInfo cell_position_info =
-      //      kRequestCellPositionInfo_(cell_id_);
+      CheckAxisTargetPointReaching(is_x_increasing_motion, position_info_.x_,
+                                   position_info_.width_, kCellPositionInfo.x_,
+                                   kCellPositionInfo.width_, target_point_x);
+      MoveFlyOnAxis(is_x_increasing_motion, position_info_.x_);
 
-      //      std::cout << " x: " << cell_position_info.x_
-      //                << " y: " << cell_position_info.y_
-      //                << " width: " << cell_position_info.width_
-      //                << " height: " << cell_position_info.height_ <<
-      //                std::endl;
+      CheckAxisTargetPointReaching(is_y_increasing_motion, position_info_.y_,
+                                   position_info_.height_, kCellPositionInfo.y_,
+                                   kCellPositionInfo.height_, target_point_y);
+      MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
 
-      position_info_.x_++;
-      position_info_.y_++;
-      //      std::cout << std::this_thread::get_id() << " : " << name_
-      //                << " : x: " << position_info_.x_
-      //                << " : y: " << position_info_.y_ << std::endl;
+      cycle_rounds_counter++;
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(15));
-    //    std::this_thread::sleep_for(std::chrono::seconds(stupidity_));
+    std::this_thread::sleep_for(
+        std::chrono::milliseconds(kFliesUpdatePeriodMilliseconds));
   }
 }
 
@@ -226,6 +266,7 @@ void Fly::Implementation::Run() {
 
   thread_.reset(new std::thread([&]() { FlyingFunction(); }));
   is_need_stop_ = false;
+  is_alive_ = true;
 }
 
 void Fly::Implementation::RequestStop() {

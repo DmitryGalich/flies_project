@@ -8,4 +8,6 @@ struct PositionInfo {
   int height_{};
 };
 
+const int kFliesUpdatePeriodMilliseconds{10};
+
 #endif

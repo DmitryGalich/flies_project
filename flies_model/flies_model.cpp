@@ -52,7 +52,7 @@ void FliesModel::runSession() {
     return;
 
   timer_.reset(new QTimer(this));
-  timer_->setInterval(15);
+  timer_->setInterval(kFliesUpdatePeriodMilliseconds);
   connect(timer_.get(), &QTimer::timeout, [&]() {
     beginResetModel();
     endResetModel();
