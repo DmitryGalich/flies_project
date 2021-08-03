@@ -7,7 +7,7 @@
 
 class Cell {
  public:
-  Cell(const int capacity = 5);
+  Cell(const int capacity = 15);
   ~Cell() = default;
 
   int GetCapacity() const;

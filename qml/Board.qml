@@ -66,14 +66,18 @@ Rectangle {
 
         delegate: Rectangle {
             id: fly
-
+            x: parent.x
+            y: parent.y
             Image {
                 id: flyImage
                 source: flyIcon
-                sourceSize.height: board.cellHeight * 0.2
-                sourceSize.width: board.cellWidth * 0.2
+                sourceSize.height: flyHeight
+                sourceSize.width: flyWidth
                 x: flyX
                 y: flyY
+
+                onXChanged: flyRealX = x
+                onYChanged: flyRealY = y
             }
         }
     }
@@ -85,6 +89,8 @@ Rectangle {
         hoverEnabled: true
         onClicked: {
             BoardModel.openCellSettingsWindow(board.indexAt(mouseX, mouseY))
+
+            console.log("x: " + mouseX + " y: " + mouseY)
         }
     }
 }

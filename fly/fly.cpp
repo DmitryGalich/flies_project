@@ -11,6 +11,9 @@ namespace {
 static int flies_count = 0;
 static const int kStupidityMax = 10;
 
+const float kFlyWidthShareOfCellWidth{0.2};
+const float kFlyHeightShareOfCellHeight{0.2};
+
 static const std::vector<std::string> kIconPaths{
     "res/fly_0.png", "res/fly_1.png", "res/fly_2.png", "res/fly_3.png"};
 
@@ -31,7 +34,7 @@ class Fly::Implementation {
       const std::function<std::vector<int>(const int)>
           request_possible_cells_to_move,
       const std::function<bool(const int, const int)> request_fly_replacement);
-  ~Implementation() = default;
+  ~Implementation();
 
   void Run();
   void RequestStop();
@@ -52,9 +55,11 @@ class Fly::Implementation {
 
   int GetX();
   void SetX(const int x);
+  void SetRealX(const int x);
 
   int GetY();
   void SetY(const int y);
+  void SetRealY(const int y);
 
   int GetWidth();
   void SetWidth(const int width);
@@ -77,6 +82,7 @@ class Fly::Implementation {
   bool is_need_stop_{false};
   bool is_alive_{false};
   PositionInfo position_info_{};
+  PositionInfo real_position_info_{};
 
   std::shared_ptr<std::thread> thread_;
   mutable std::mutex mtx_;
@@ -98,17 +104,17 @@ Fly::Implementation::Implementation(
       name_(name),
       cell_id_(cell_id),
       position_info_([&]() {
-        //        auto kCellPositionInfo = kRequestCellPositionInfo_(cell_id_);
-        //        int x = GenerateValueInRange(
-        //            kCellPositionInfo.x_,
-        //            kCellPositionInfo.x_ + kCellPositionInfo.width_);
-        //        int y = GenerateValueInRange(
-        //            kCellPositionInfo.y_,
-        //            kCellPositionInfo.y_ + kCellPositionInfo.height_);
-        //        return PositionInfo{x, y};
+        auto kCellPositionInfo = kRequestCellPositionInfo_(cell_id_);
 
-        return PositionInfo{};
+        int width = kCellPositionInfo.width_ * kFlyWidthShareOfCellWidth;
+        int height = kCellPositionInfo.height_ * kFlyHeightShareOfCellHeight;
+
+        return PositionInfo{0, 0, width, height};
       }()) {}
+
+Fly::Implementation::~Implementation() {
+  Stop();
+}
 
 int Fly::Implementation::GetStupidity() const {
   std::lock_guard<std::mutex> guard(mtx_);
@@ -170,6 +176,11 @@ void Fly::Implementation::SetX(const int x) {
   position_info_.x_ = x;
 }
 
+void Fly::Implementation::SetRealX(const int x) {
+  std::lock_guard<std::mutex> guard(mtx_);
+  real_position_info_.x_ = x;
+}
+
 int Fly::Implementation::GetY() {
   std::lock_guard<std::mutex> guard(mtx_);
 
@@ -180,6 +191,11 @@ void Fly::Implementation::SetY(const int y) {
   std::lock_guard<std::mutex> guard(mtx_);
 
   position_info_.y_ = y;
+}
+
+void Fly::Implementation::SetRealY(const int y) {
+  std::lock_guard<std::mutex> guard(mtx_);
+  real_position_info_.y_ = y;
 }
 
 int Fly::Implementation::GetWidth() {
@@ -235,23 +251,32 @@ void Fly::Implementation::FlyingFunction() {
       fly_position--;
   };
 
+  // =========================================
+
   while (!is_need_stop_) {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
       auto kCellPositionInfo{kRequestCellPositionInfo_(cell_id_)};
 
+      // X axis
       CheckAxisTargetPointReaching(is_x_increasing_motion, position_info_.x_,
                                    position_info_.width_, kCellPositionInfo.x_,
                                    kCellPositionInfo.width_, target_point_x);
       MoveFlyOnAxis(is_x_increasing_motion, position_info_.x_);
 
+      // Y axis
       CheckAxisTargetPointReaching(is_y_increasing_motion, position_info_.y_,
                                    position_info_.height_, kCellPositionInfo.y_,
                                    kCellPositionInfo.height_, target_point_y);
       MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
 
       cycle_rounds_counter++;
+
+      if (name_ == "fly_1") {
+        position_info_.x_ = -120;
+      }
+      std::cout << position_info_.x_ << " : " << position_info_.y_ << std::endl;
     }
 
     std::this_thread::sleep_for(
@@ -260,6 +285,9 @@ void Fly::Implementation::FlyingFunction() {
 }
 
 void Fly::Implementation::Run() {
+  if (thread_)
+    return;
+
   std::cout << std::this_thread::get_id() << " : Run" << std::endl;
 
   std::lock_guard<std::mutex> guard(mtx_);
@@ -358,12 +386,20 @@ void Fly::SetX(const int x) {
   impl_->SetX(x);
 }
 
+void Fly::SetRealX(const int x) {
+  impl_->SetRealX(x);
+}
+
 int Fly::GetY() const {
   return impl_->GetY();
 }
 
 void Fly::SetY(const int y) {
   impl_->SetY(y);
+}
+
+void Fly::SetRealY(const int y) {
+  impl_->SetRealY(y);
 }
 
 int Fly::GetWidth() const {

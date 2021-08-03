@@ -41,9 +41,11 @@ class Fly {
 
   int GetX() const;
   void SetX(const int x);
+  void SetRealX(const int x);
 
   int GetY() const;
   void SetY(const int y);
+  void SetRealY(const int y);
 
   int GetWidth() const;
   void SetWidth(const int width);

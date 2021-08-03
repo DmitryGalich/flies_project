@@ -28,6 +28,8 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
     IconRole,
     XRole,
     YRole,
+    RealXRole,
+    RealYRole,
     WidthRole,
     HeightRole
   };
@@ -41,6 +43,9 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   int rowCount(const QModelIndex& parent = QModelIndex()) const override;
   QVariant data(const QModelIndex& index,
                 int role = Qt::DisplayRole) const override;
+  bool setData(const QModelIndex& index,
+               const QVariant& value,
+               int role = Qt::EditRole) override;
 
  protected:
   Q_INVOKABLE void runSession();

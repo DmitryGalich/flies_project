@@ -11,7 +11,9 @@ FliesModel::FliesModel(const std::string& qml_title,
       kRequestCellsCount_(request_cells_count),
       flies_holder_(flies_holder) {}
 
-FliesModel::~FliesModel() {}
+FliesModel::~FliesModel() {
+  stopSession();
+}
 
 int FliesModel::rowCount(const QModelIndex& parent) const {
   Q_UNUSED(parent);
@@ -45,6 +47,27 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
     return flies_holder_.GetFly(index.row()).GetHeight();
 
   return QVariant();
+}
+
+bool FliesModel::setData(const QModelIndex& index,
+                         const QVariant& value,
+                         int role) {
+  if (index.row() < 0 ||
+      index.row() >= static_cast<int>(flies_holder_.GetFliesCount()))
+    return false;
+
+  if (index.column() < 0 ||
+      index.column() >= static_cast<int>(flies_holder_.GetFliesCount()))
+    return false;
+
+  if (role == RealXRole)
+    flies_holder_.GetFly(index.row()).SetX(value.toInt());
+  else if (role == RealYRole)
+    flies_holder_.GetFly(index.row()).SetY(value.toInt());
+
+  dataChanged(index, index, {RealXRole, RealYRole});
+
+  return true;
 }
 
 void FliesModel::runSession() {
@@ -104,6 +127,10 @@ QHash<int, QByteArray> FliesModel::roleNames() const {
 
   roles[XRole] = "flyX";
   roles[YRole] = "flyY";
+
+  roles[RealXRole] = "flyRealX";
+  roles[RealYRole] = "flyRealY";
+
   roles[WidthRole] = "flyWidth";
   roles[HeightRole] = "flyHeight";
 
