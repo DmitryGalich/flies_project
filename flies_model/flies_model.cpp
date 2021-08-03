@@ -54,11 +54,8 @@ void FliesModel::runSession() {
   timer_.reset(new QTimer(this));
   timer_->setInterval(15);
   connect(timer_.get(), &QTimer::timeout, [&]() {
-    //    beginResetModel();
-    std::cout << "Model reseting" << std::endl;
-    emit dataChanged(this->index(0), this->index(flies_holder_.GetFliesCount()),
-                     {XRole, YRole, WidthRole, HeightRole});
-    //    endResetModel();
+    beginResetModel();
+    endResetModel();
   });
   timer_->start();
 }

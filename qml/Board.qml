@@ -72,6 +72,8 @@ Rectangle {
                 source: flyIcon
                 sourceSize.height: board.cellHeight * 0.2
                 sourceSize.width: board.cellWidth * 0.2
+                x: flyX
+                y: flyY
             }
         }
     }

@@ -209,9 +209,9 @@ void Fly::Implementation::FlyingFunction() {
 
       position_info_.x_++;
       position_info_.y_++;
-      std::cout << std::this_thread::get_id() << " : " << name_
-                << " : x: " << position_info_.x_
-                << " : y: " << position_info_.y_ << std::endl;
+      //      std::cout << std::this_thread::get_id() << " : " << name_
+      //                << " : x: " << position_info_.x_
+      //                << " : y: " << position_info_.y_ << std::endl;
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(15));
