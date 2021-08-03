@@ -195,7 +195,8 @@ void Fly::Implementation::FlyingFunction() {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
-      std::cout << std::this_thread::get_id() << " : " << name_ << std::endl;
+      //      std::cout << std::this_thread::get_id() << " : " << name_ <<
+      //      std::endl;
 
       //      PositionInfo cell_position_info =
       //      kRequestCellPositionInfo_(cell_id_);
@@ -206,12 +207,15 @@ void Fly::Implementation::FlyingFunction() {
       //                << " height: " << cell_position_info.height_ <<
       //                std::endl;
 
-      //      position_info_.x_++;
-      //      position_info_.y_++;
+      position_info_.x_++;
+      position_info_.y_++;
+      std::cout << std::this_thread::get_id() << " : " << name_
+                << " : x: " << position_info_.x_
+                << " : y: " << position_info_.y_ << std::endl;
     }
 
-    //    std::this_thread::sleep_for(std::chrono::milliseconds(16));
-    std::this_thread::sleep_for(std::chrono::seconds(stupidity_));
+    std::this_thread::sleep_for(std::chrono::milliseconds(15));
+    //    std::this_thread::sleep_for(std::chrono::seconds(stupidity_));
   }
 }
 

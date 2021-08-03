@@ -50,10 +50,26 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
 void FliesModel::runSession() {
   if (!flies_holder_.Run())
     return;
+
+  timer_.reset(new QTimer(this));
+  timer_->setInterval(15);
+  connect(timer_.get(), &QTimer::timeout, [&]() {
+    //    beginResetModel();
+    std::cout << "Model reseting" << std::endl;
+    emit dataChanged(this->index(0), this->index(flies_holder_.GetFliesCount()),
+                     {XRole, YRole, WidthRole, HeightRole});
+    //    endResetModel();
+  });
+  timer_->start();
 }
 
 void FliesModel::stopSession() {
   flies_holder_.Stop();
+
+  if (!timer_)
+    return;
+  timer_->stop();
+  timer_.reset();
 }
 
 void FliesModel::signalizeToOpenFlySettingsWindow() {

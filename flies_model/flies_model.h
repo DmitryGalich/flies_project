@@ -6,6 +6,7 @@
 
 #include <QAbstractListModel>
 #include <QObject>
+#include <QTimer>
 
 #include "abstract_qml_handler.h"
 #include "fly.h"
@@ -52,6 +53,7 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
  private:
   const std::function<int()> kRequestCellsCount_;
   FliesHolder& flies_holder_;
+  std::unique_ptr<QTimer> timer_;
 };
 
 #endif
