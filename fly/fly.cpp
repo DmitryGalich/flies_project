@@ -33,18 +33,18 @@ class Fly::Implementation {
   void RequestStop();
   void Stop();
 
-  int GetStupidity();
+  int GetStupidity() const;
   void SetStupidity(const int stupidity);
 
-  std::string GetName();
+  std::string GetName() const;
   void SetName(const std::string& name);
 
-  int GetAge();
+  int GetAge() const;
   void IncreaseAge();
 
-  int GetCellId();
+  int GetCellId() const;
 
-  std::string GetIconPath();
+  std::string GetIconPath() const;
 
   int GetX();
   void SetX(const int x);
@@ -65,17 +65,17 @@ class Fly::Implementation {
 
   void FlyingFunction();
 
-  PositionInfo position_info_;
+  PositionInfo position_info_{};
 
-  std::string icon_path_;
-  int stupidity_;
+  std::string icon_path_{};
+  int stupidity_{};
   int age_{0};
   std::string name_;
-  int cell_id_;
+  int cell_id_{};
   bool is_need_stop_{false};
 
   std::shared_ptr<std::thread> thread_;
-  std::mutex mtx_;
+  mutable std::mutex mtx_;
 };
 
 Fly::Implementation::Implementation(
@@ -94,7 +94,7 @@ Fly::Implementation::Implementation(
       name_(name),
       cell_id_(cell_id) {}
 
-int Fly::Implementation::GetStupidity() {
+int Fly::Implementation::GetStupidity() const {
   std::lock_guard<std::mutex> guard(mtx_);
 
   return stupidity_;
@@ -106,7 +106,7 @@ void Fly::Implementation::SetStupidity(const int stupidity) {
   stupidity_ = stupidity;
 }
 
-std::string Fly::Implementation::GetName() {
+std::string Fly::Implementation::GetName() const {
   std::lock_guard<std::mutex> guard(mtx_);
 
   return name_;
@@ -118,7 +118,7 @@ void Fly::Implementation::SetName(const std::string& name) {
   name_ = name;
 }
 
-int Fly::Implementation::GetAge() {
+int Fly::Implementation::GetAge() const {
   std::lock_guard<std::mutex> guard(mtx_);
 
   return age_;
@@ -130,13 +130,13 @@ void Fly::Implementation::IncreaseAge() {
   age_++;
 }
 
-int Fly::Implementation::GetCellId() {
+int Fly::Implementation::GetCellId() const {
   std::lock_guard<std::mutex> guard(mtx_);
 
   return cell_id_;
 }
 
-std::string Fly::Implementation::GetIconPath() {
+std::string Fly::Implementation::GetIconPath() const {
   std::lock_guard<std::mutex> guard(mtx_);
 
   return icon_path_;
@@ -305,7 +305,7 @@ int Fly::GetCellId() const {
   return impl_->GetCellId();
 }
 
-std::string Fly::GetIconPath() {
+std::string Fly::GetIconPath() const {
   return impl_->GetIconPath();
 }
 

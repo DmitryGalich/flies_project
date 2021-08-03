@@ -9,7 +9,7 @@ class FliesHolder::Implementation {
 
   ErrorCodes AddFly(std::string name, int stupidity, int cell_id);
   Fly& GetFly(const size_t index);
-  int GetFliesCount();
+  int GetFliesCount() const;
 
   bool Run();
   void Stop();
@@ -46,7 +46,7 @@ Fly& FliesHolder::Implementation::GetFly(const size_t index) {
   return flies_.at(index);
 }
 
-int FliesHolder::Implementation::GetFliesCount() {
+int FliesHolder::Implementation::GetFliesCount() const {
   return flies_.size();
 }
 
@@ -102,7 +102,7 @@ Fly& FliesHolder::GetFly(const size_t index) {
   return impl_->GetFly(index);
 }
 
-int FliesHolder::GetFliesCount() {
+int FliesHolder::GetFliesCount() const {
   return impl_->GetFliesCount();
 }
 

@@ -37,7 +37,7 @@ class Fly {
 
   int GetCellId() const;
 
-  std::string GetIconPath();
+  std::string GetIconPath() const;
 
   int GetX() const;
   void SetX(const int x);
@@ -67,7 +67,7 @@ class FliesHolder {
 
   ErrorCodes AddFly(std::string name, int stupidity, int cell_id);
   Fly& GetFly(const size_t index);
-  int GetFliesCount();
+  int GetFliesCount() const;
 
   bool Run();
   void Stop();
