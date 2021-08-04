@@ -31,6 +31,8 @@ QVariant BoardModel::data(const QModelIndex& index, int role) const {
 
   if (role == CellCapacitytRole)
     return QString::number(cells_holder_.GetCell(index.row()).GetCapacity());
+  else if (role == CellFliesRole)
+    return QString::number(cells_holder_.GetCell(index.row()).GetFliesCount());
 
   return QVariant();
 }
@@ -56,6 +58,8 @@ bool BoardModel::setData(const QModelIndex& index,
     cells_holder_.GetCell(index.row()).SetHeight(value.toInt());
   else if (role == CellCapacitytRole)
     cells_holder_.GetCell(index.row()).SetCapacity(value.toInt());
+  else if (role == CellFliesRole)
+    cells_holder_.GetCell(index.row()).SetFliesyCount(value.toInt());
 
   dataChanged(index, index,
               {CellFliesRole, CellXRole, CellYRole, CellWidthRole,
@@ -104,4 +108,9 @@ void BoardModel::setCellCapacity(const int cell_index, const int value) {
     return;
 
   setData(index(cell_index, 0), value, CellCapacitytRole);
+}
+
+void BoardModel::updateModel() {
+  beginResetModel();
+  endResetModel();
 }

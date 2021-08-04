@@ -52,6 +52,7 @@ class BoardModel : public QAbstractListModel, public AbstractQMLHandler {
 
   Q_INVOKABLE void openCellSettingsWindow(const int cell_index);
   Q_INVOKABLE void setCellCapacity(const int cell_index, const int value);
+  Q_INVOKABLE void updateModel();
 
  private:
   CellsHolder& cells_holder_;

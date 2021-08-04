@@ -240,6 +240,7 @@ Popup {
                     FliesModel.addFly(nameWidget.text, stupidityWidget.value,
                                       cellWidget.value)
                     onClicked: close()
+                    BoardModel.updateModel()
                 }
             }
 
