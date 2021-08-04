@@ -27,26 +27,16 @@ Rectangle {
         delegate: Rectangle {
             id: cell
 
-            function updateData() {
-                cellX = cell.x
-                cellY = cell.y
-                cellWidth = cell.width
-                cellHeight = cell.height
-            }
-
             width: board.width / BoardModel.gridSide
             height: board.height / BoardModel.gridSide
 
             border.color: Material.color(Material.Grey, Material.Shade700)
             color: Material.backgroundColor
 
-            onWidthChanged: {
-                updateData()
-            }
-
-            onHeightChanged: {
-                updateData()
-            }
+            onXChanged: cellX = cell.mapToItem(board, 0, 0).x
+            onYChanged: cellY = cell.mapToItem(board, 0, 0).y
+            onWidthChanged: cellWidth = cell.width
+            onHeightChanged: cellHeight = cell.height
 
             Label {
                 anchors.fill: parent
