@@ -31,7 +31,8 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
     RealXRole,
     RealYRole,
     WidthRole,
-    HeightRole
+    HeightRole,
+    VisablityRole
   };
 
   FliesModel(const std::string& qml_title,

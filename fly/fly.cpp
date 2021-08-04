@@ -53,6 +53,8 @@ class Fly::Implementation {
 
   std::string GetIconPath() const;
 
+  bool GetVisability() const;
+
   int GetX();
   void SetX(const int x);
   void SetRealX(const int x);
@@ -74,6 +76,7 @@ class Fly::Implementation {
 
   void FlyingFunction();
 
+  bool is_visible_{false};
   std::string icon_path_{};
   int stupidity_{};
   int age_{0};
@@ -162,6 +165,10 @@ std::string Fly::Implementation::GetIconPath() const {
   std::lock_guard<std::mutex> guard(mtx_);
 
   return icon_path_;
+}
+
+bool Fly::Implementation::GetVisability() const {
+  return is_visible_;
 }
 
 int Fly::Implementation::GetX() {
@@ -259,24 +266,34 @@ void Fly::Implementation::FlyingFunction() {
 
       auto kCellPositionInfo{kRequestCellPositionInfo_(cell_id_)};
 
-      // X axis
-      CheckAxisTargetPointReaching(is_x_increasing_motion, position_info_.x_,
-                                   position_info_.width_, kCellPositionInfo.x_,
-                                   kCellPositionInfo.width_, target_point_x);
-      MoveFlyOnAxis(is_x_increasing_motion, position_info_.x_);
-
-      // Y axis
-      CheckAxisTargetPointReaching(is_y_increasing_motion, position_info_.y_,
-                                   position_info_.height_, kCellPositionInfo.y_,
-                                   kCellPositionInfo.height_, target_point_y);
-      MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
-
-      cycle_rounds_counter++;
+      position_info_.x_ = kCellPositionInfo.x_ - real_position_info_.x_;
+      position_info_.y_ = kCellPositionInfo.y_ - real_position_info_.y_;
 
       if (name_ == "fly_1") {
-        position_info_.x_ = -120;
+        std::cout << name_ << " real(" << real_position_info_.x_ << " : "
+                  << real_position_info_.y_ << ") just (" << position_info_.x_
+                  << " : " << position_info_.y_ << ")" << std::endl;
       }
-      std::cout << position_info_.x_ << " : " << position_info_.y_ << std::endl;
+
+      //      // X axis
+      //      CheckAxisTargetPointReaching(is_x_increasing_motion,
+      //      position_info_.x_,
+      //                                   position_info_.width_,
+      //                                   kCellPositionInfo.x_,
+      //                                   kCellPositionInfo.width_,
+      //                                   target_point_x);
+      //      MoveFlyOnAxis(is_x_increasing_motion, position_info_.x_);
+
+      //      // Y axis
+      //      CheckAxisTargetPointReaching(is_y_increasing_motion,
+      //      position_info_.y_,
+      //                                   position_info_.height_,
+      //                                   kCellPositionInfo.y_,
+      //                                   kCellPositionInfo.height_,
+      //                                   target_point_y);
+      //      MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
+
+      //      cycle_rounds_counter++;
     }
 
     std::this_thread::sleep_for(
@@ -388,6 +405,10 @@ void Fly::SetX(const int x) {
 
 void Fly::SetRealX(const int x) {
   impl_->SetRealX(x);
+}
+
+bool Fly::GetVisability() const {
+  return impl_->GetVisability();
 }
 
 int Fly::GetY() const {

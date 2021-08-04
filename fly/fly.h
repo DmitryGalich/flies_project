@@ -39,6 +39,8 @@ class Fly {
 
   std::string GetIconPath() const;
 
+  bool GetVisability() const;
+
   int GetX() const;
   void SetX(const int x);
   void SetRealX(const int x);

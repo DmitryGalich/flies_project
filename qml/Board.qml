@@ -6,6 +6,8 @@ import QtQuick.Controls.Material 2.2
 import QtQuick.Controls 2.13
 
 Rectangle {
+    id: general
+
     function setCellCapacity(cellIndex, capacity) {
         if (BoardModel === null)
             return
@@ -68,16 +70,19 @@ Rectangle {
             id: fly
             x: parent.x
             y: parent.y
+
+            visible: flyVisible
+
+            onXChanged: flyRealX = fly.mapToItem(flies, 0, 0).x
+            onYChanged: flyRealY = fly.mapToItem(flies, 0, 0).y
             Image {
                 id: flyImage
                 source: flyIcon
+
                 sourceSize.height: flyHeight
                 sourceSize.width: flyWidth
                 x: flyX
                 y: flyY
-
-                onXChanged: flyRealX = x
-                onYChanged: flyRealY = y
             }
         }
     }
@@ -88,9 +93,8 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-            BoardModel.openCellSettingsWindow(board.indexAt(mouseX, mouseY))
 
-            console.log("x: " + mouseX + " y: " + mouseY)
+            BoardModel.openCellSettingsWindow(board.indexAt(mouseX, mouseY))
         }
     }
 }

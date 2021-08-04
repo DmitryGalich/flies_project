@@ -46,6 +46,9 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
   else if (role == HeightRole)
     return flies_holder_.GetFly(index.row()).GetHeight();
 
+  else if (role == VisablityRole)
+    return flies_holder_.GetFly(index.row()).GetVisability();
+
   return QVariant();
 }
 
@@ -56,14 +59,10 @@ bool FliesModel::setData(const QModelIndex& index,
       index.row() >= static_cast<int>(flies_holder_.GetFliesCount()))
     return false;
 
-  if (index.column() < 0 ||
-      index.column() >= static_cast<int>(flies_holder_.GetFliesCount()))
-    return false;
-
   if (role == RealXRole)
-    flies_holder_.GetFly(index.row()).SetX(value.toInt());
+    flies_holder_.GetFly(index.row()).SetRealX(value.toInt());
   else if (role == RealYRole)
-    flies_holder_.GetFly(index.row()).SetY(value.toInt());
+    flies_holder_.GetFly(index.row()).SetRealY(value.toInt());
 
   dataChanged(index, index, {RealXRole, RealYRole});
 
@@ -133,6 +132,8 @@ QHash<int, QByteArray> FliesModel::roleNames() const {
 
   roles[WidthRole] = "flyWidth";
   roles[HeightRole] = "flyHeight";
+
+  roles[VisablityRole] = "flyVisible";
 
   return roles;
 }
