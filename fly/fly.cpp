@@ -85,7 +85,7 @@ class Fly::Implementation {
   bool is_need_stop_{false};
   bool is_alive_{false};
   PositionInfo position_info_{};
-  PositionInfo real_position_info_{};
+  PositionInfo real_position_shift_info_{};
 
   std::shared_ptr<std::thread> thread_;
   mutable std::mutex mtx_;
@@ -185,7 +185,7 @@ void Fly::Implementation::SetX(const int x) {
 
 void Fly::Implementation::SetRealX(const int x) {
   std::lock_guard<std::mutex> guard(mtx_);
-  real_position_info_.x_ = x;
+  real_position_shift_info_.x_ = x;
 }
 
 int Fly::Implementation::GetY() {
@@ -202,7 +202,7 @@ void Fly::Implementation::SetY(const int y) {
 
 void Fly::Implementation::SetRealY(const int y) {
   std::lock_guard<std::mutex> guard(mtx_);
-  real_position_info_.y_ = y;
+  real_position_shift_info_.y_ = y;
 }
 
 int Fly::Implementation::GetWidth() {
@@ -239,13 +239,26 @@ void Fly::Implementation::FlyingFunction() {
   int flying_seconds_counter{0};
   int cycle_rounds_counter{0};
 
+  const auto SetStartPosition = [&](const PositionInfo& cell_position_info) {
+    position_info_.x_ = GenerateValueInRange(
+        (cell_position_info.x_ - real_position_shift_info_.x_),
+        (cell_position_info.x_ + cell_position_info.width_ -
+         position_info_.width_ - real_position_shift_info_.x_));
+    position_info_.y_ = GenerateValueInRange(
+        (cell_position_info.y_ - real_position_shift_info_.y_),
+        (cell_position_info.y_ + cell_position_info.height_ -
+         position_info_.height_ - real_position_shift_info_.y_));
+  };
+
   const auto CheckAxisTargetPointReaching =
-      [](bool& is_increasing_motion, int& fly_position, int& fly_size,
-         int& cell_position, int& cell_size, int& target_position) {
+      [&](bool& is_increasing_motion, int& fly_position, int& fly_size,
+          int& cell_position, int& cell_size, int& target_position, int shift) {
         if (((fly_position >= target_position) && is_increasing_motion) ||
             ((fly_position <= target_position) && !is_increasing_motion)) {
-          target_position = GenerateValueInRange(
-              cell_position, cell_position + cell_size - fly_size);
+          target_position =
+              GenerateValueInRange(cell_position,
+                                   cell_position + cell_size - fly_size) -
+              shift;
 
           is_increasing_motion = (target_position > fly_position);
         }
@@ -262,73 +275,39 @@ void Fly::Implementation::FlyingFunction() {
 
   auto cell_position_info{kRequestCellPositionInfo_(cell_id_)};
 
-  //  if (!is_visible_) {
-  //    is_visible_ = true;
-
-  //    position_info_.x_ =
-  //        GenerateValueInRange((cell_position_info.x_ -
-  //        real_position_info_.x_),
-  //                             (cell_position_info.x_ + cell_position_info.x_
-  //                             -
-  //                              position_info_.width_ -
-  //                              real_position_info_.x_));
-  //    position_info_.y_ =
-  //        GenerateValueInRange((cell_position_info.y_ -
-  //        real_position_info_.y_),
-  //                             (cell_position_info.y_ + cell_position_info.y_
-  //                             -
-  //                              position_info_.height_ -
-  //                              real_position_info_.y_));
-  //  }
-
   {
     std::lock_guard<std::mutex> guard(mtx_);
-    is_visible_ = true;
+
+    if (!is_visible_) {
+      is_visible_ = true;
+      SetStartPosition(cell_position_info);
+    }
   }
 
   while (!is_need_stop_) {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
-      position_info_.x_ = GenerateValueInRange(
-          (cell_position_info.x_ - real_position_info_.x_),
-          (cell_position_info.x_ + cell_position_info.width_ -
-           position_info_.width_ - real_position_info_.x_));
-      position_info_.y_ = GenerateValueInRange(
-          (cell_position_info.y_ - real_position_info_.y_),
-          (cell_position_info.y_ + cell_position_info.height_ -
-           position_info_.height_ - real_position_info_.y_));
+      cell_position_info = kRequestCellPositionInfo_(cell_id_);
 
-      //      cell_position_info = kRequestCellPositionInfo_(cell_id_);
+      // X axis
+      CheckAxisTargetPointReaching(is_x_increasing_motion, position_info_.x_,
+                                   position_info_.width_, cell_position_info.x_,
+                                   cell_position_info.width_, target_point_x,
+                                   real_position_shift_info_.x_);
+      MoveFlyOnAxis(is_x_increasing_motion, position_info_.x_);
 
-      //      position_info_.x_ = cell_position_info.x_ -
-      //      real_position_info_.x_; position_info_.y_ = cell_position_info.y_
-      //      - real_position_info_.y_;
-
-      //      if (name_ == "fly_1") {
-      //        std::cout << name_ << " real(" << real_position_info_.x_ << " :
-      //        "
-      //                  << real_position_info_.y_ << ") just (" <<
-      //                  position_info_.x_
-      //                  << " : " << position_info_.y_ << ")" << std::endl;
-      //      }
-
-      //      // X axis
-      //      CheckAxisTargetPointReaching(is_x_increasing_motion,
-      //      position_info_.x_,
-      //                                   position_info_.width_,
-      //                                   kCellPositionInfo.x_,
-      //                                   kCellPositionInfo.width_,
-      //                                   target_point_x);
-      //      MoveFlyOnAxis(is_x_increasing_motion, position_info_.x_);
+      if (name_ == "fly_1")
+        std::cout << "cell_position: " << cell_position_info.x_ << " : "
+                  << cell_position_info.x_ + cell_position_info.width_
+                  << " fly: " << position_info_.x_ << std::endl;
 
       //      // Y axis
-      //      CheckAxisTargetPointReaching(is_y_increasing_motion,
-      //      position_info_.y_,
-      //                                   position_info_.height_,
-      //                                   kCellPositionInfo.y_,
-      //                                   kCellPositionInfo.height_,
-      //                                   target_point_y);
+      //      CheckAxisTargetPointReaching(
+      //          is_y_increasing_motion, position_info_.y_,
+      //          real_position_shift_info_.y_, position_info_.height_,
+      //          cell_position_info.y_, cell_position_info.height_,
+      //          target_point_y);
       //      MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
 
       //      cycle_rounds_counter++;

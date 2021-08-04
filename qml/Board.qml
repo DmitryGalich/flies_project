@@ -93,7 +93,7 @@ Rectangle {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: {
-
+            console.log(mouseX + " " + mouseY)
             BoardModel.openCellSettingsWindow(board.indexAt(mouseX, mouseY))
         }
     }
