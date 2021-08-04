@@ -230,8 +230,8 @@ void Fly::Implementation::SetHeight(const int height) {
 }
 
 void Fly::Implementation::FlyingFunction() {
-  int target_point_x{kRequestCellPositionInfo_(cell_id_).x_};
-  int target_point_y{kRequestCellPositionInfo_(cell_id_).y_};
+  int target_point_x{0};
+  int target_point_y{0};
 
   bool is_x_increasing_motion{true};
   bool is_y_increasing_motion{true};
@@ -278,10 +278,13 @@ void Fly::Implementation::FlyingFunction() {
   {
     std::lock_guard<std::mutex> guard(mtx_);
 
-    if (!is_visible_) {
+    if (!is_visible_)
       is_visible_ = true;
-      SetStartPosition(cell_position_info);
-    }
+
+    SetStartPosition(cell_position_info);
+
+    target_point_x = cell_position_info.x_ - real_position_shift_info_.x_;
+    target_point_y = cell_position_info.y_ - real_position_shift_info_.y_;
   }
 
   while (!is_need_stop_) {
@@ -297,18 +300,12 @@ void Fly::Implementation::FlyingFunction() {
                                    real_position_shift_info_.x_);
       MoveFlyOnAxis(is_x_increasing_motion, position_info_.x_);
 
-      if (name_ == "fly_1")
-        std::cout << "cell_position: " << cell_position_info.x_ << " : "
-                  << cell_position_info.x_ + cell_position_info.width_
-                  << " fly: " << position_info_.x_ << std::endl;
-
-      //      // Y axis
-      //      CheckAxisTargetPointReaching(
-      //          is_y_increasing_motion, position_info_.y_,
-      //          real_position_shift_info_.y_, position_info_.height_,
-      //          cell_position_info.y_, cell_position_info.height_,
-      //          target_point_y);
-      //      MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
+      // Y axis
+      CheckAxisTargetPointReaching(
+          is_y_increasing_motion, position_info_.y_, position_info_.height_,
+          cell_position_info.y_, cell_position_info.height_, target_point_y,
+          real_position_shift_info_.y_);
+      MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
 
       //      cycle_rounds_counter++;
     }
