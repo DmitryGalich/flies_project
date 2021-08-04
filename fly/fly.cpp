@@ -107,7 +107,7 @@ Fly::Implementation::Implementation(
       name_(name),
       cell_id_(cell_id),
       position_info_([&]() {
-        auto kCellPositionInfo = kRequestCellPositionInfo_(cell_id_);
+        const auto kCellPositionInfo = kRequestCellPositionInfo_(cell_id_);
 
         int width = kCellPositionInfo.width_ * kFlyWidthShareOfCellWidth;
         int height = kCellPositionInfo.height_ * kFlyHeightShareOfCellHeight;
@@ -260,20 +260,58 @@ void Fly::Implementation::FlyingFunction() {
 
   // =========================================
 
+  auto cell_position_info{kRequestCellPositionInfo_(cell_id_)};
+
+  //  if (!is_visible_) {
+  //    is_visible_ = true;
+
+  //    position_info_.x_ =
+  //        GenerateValueInRange((cell_position_info.x_ -
+  //        real_position_info_.x_),
+  //                             (cell_position_info.x_ + cell_position_info.x_
+  //                             -
+  //                              position_info_.width_ -
+  //                              real_position_info_.x_));
+  //    position_info_.y_ =
+  //        GenerateValueInRange((cell_position_info.y_ -
+  //        real_position_info_.y_),
+  //                             (cell_position_info.y_ + cell_position_info.y_
+  //                             -
+  //                              position_info_.height_ -
+  //                              real_position_info_.y_));
+  //  }
+
+  {
+    std::lock_guard<std::mutex> guard(mtx_);
+    is_visible_ = true;
+  }
+
   while (!is_need_stop_) {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
-      auto kCellPositionInfo{kRequestCellPositionInfo_(cell_id_)};
+      position_info_.x_ = GenerateValueInRange(
+          (cell_position_info.x_ - real_position_info_.x_),
+          (cell_position_info.x_ + cell_position_info.width_ -
+           position_info_.width_ - real_position_info_.x_));
+      position_info_.y_ = GenerateValueInRange(
+          (cell_position_info.y_ - real_position_info_.y_),
+          (cell_position_info.y_ + cell_position_info.height_ -
+           position_info_.height_ - real_position_info_.y_));
 
-      position_info_.x_ = kCellPositionInfo.x_ - real_position_info_.x_;
-      position_info_.y_ = kCellPositionInfo.y_ - real_position_info_.y_;
+      //      cell_position_info = kRequestCellPositionInfo_(cell_id_);
 
-      if (name_ == "fly_1") {
-        std::cout << name_ << " real(" << real_position_info_.x_ << " : "
-                  << real_position_info_.y_ << ") just (" << position_info_.x_
-                  << " : " << position_info_.y_ << ")" << std::endl;
-      }
+      //      position_info_.x_ = cell_position_info.x_ -
+      //      real_position_info_.x_; position_info_.y_ = cell_position_info.y_
+      //      - real_position_info_.y_;
+
+      //      if (name_ == "fly_1") {
+      //        std::cout << name_ << " real(" << real_position_info_.x_ << " :
+      //        "
+      //                  << real_position_info_.y_ << ") just (" <<
+      //                  position_info_.x_
+      //                  << " : " << position_info_.y_ << ")" << std::endl;
+      //      }
 
       //      // X axis
       //      CheckAxisTargetPointReaching(is_x_increasing_motion,
