@@ -236,6 +236,11 @@ void Fly::Implementation::FlyingFunction() {
   bool is_x_increasing_motion{true};
   bool is_y_increasing_motion{true};
 
+  bool is_changing_cell_axis_x{false};
+  bool is_changing_cell_axis_y{false};
+
+  int cells_counter{0};
+
   const auto SetStartPosition = [&](const PositionInfo& cell_position_info) {
     position_info_.x_ = GenerateValueInRange(
         (cell_position_info.x_ - real_position_shift_info_.x_),
@@ -278,13 +283,10 @@ void Fly::Implementation::FlyingFunction() {
         if (diff.count() < static_cast<double>(stupidity_ * 1000))
           return;
 
-        std::cout << name_ << " need change cell" << std::endl;
-
         auto cells_to_move = kRequestPossibleCellsToMove_(cell_id_);
 
         if (cells_to_move.empty()) {
           appearence_in_cell_time = std::chrono::high_resolution_clock::now();
-          std::cout << name_ << " stays in the same cell" << std::endl;
           return;
         }
 
@@ -294,9 +296,11 @@ void Fly::Implementation::FlyingFunction() {
         if (!kRequestFlyReplacement_(
                 cell_id_, cells_to_move.at(random_cell_to_move_index))) {
           appearence_in_cell_time = std::chrono::high_resolution_clock::now();
-          std::cout << name_ << " stays in the same cell" << std::endl;
           return;
         }
+
+        is_changing_cell_axis_x = true;
+        is_changing_cell_axis_y = true;
 
         cell_id_ = cells_to_move.at(random_cell_to_move_index);
 
@@ -309,8 +313,7 @@ void Fly::Implementation::FlyingFunction() {
                          (target_cell_position_info.height_ / 2) -
                          real_position_shift_info_.y_;
         appearence_in_cell_time = std::chrono::high_resolution_clock::now();
-
-        std::cout << name_ << " moved to cell(" << cell_id_ << ")" << std::endl;
+        cells_counter++;
       };
 
   // =========================================
