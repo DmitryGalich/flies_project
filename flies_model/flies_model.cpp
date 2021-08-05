@@ -80,6 +80,9 @@ void FliesModel::runSession() {
     endResetModel();
   });
   timer_->start();
+
+  is_running_ = true;
+  emit isRunningChanged();
 }
 
 void FliesModel::stopSession() {
@@ -89,6 +92,9 @@ void FliesModel::stopSession() {
     return;
   timer_->stop();
   timer_.reset();
+
+  is_running_ = false;
+  emit isRunningChanged();
 }
 
 void FliesModel::signalizeToOpenFlySettingsWindow() {
@@ -136,4 +142,8 @@ QHash<int, QByteArray> FliesModel::roleNames() const {
   roles[VisablityRole] = "flyVisible";
 
   return roles;
+}
+
+bool FliesModel::getIsRunning() const {
+  return is_running_;
 }

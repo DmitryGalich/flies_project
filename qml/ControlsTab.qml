@@ -13,6 +13,8 @@ RowLayout {
         icon.source: "res/play.png"
         icon.color: Material.color(Material.Green)
 
+        visible: (FliesModel != null) ? !FliesModel.isRunning : false
+
         onClicked: {
             FliesModel.runSession()
         }
@@ -23,6 +25,8 @@ RowLayout {
 
         icon.source: "res/stop.png"
         icon.color: Material.color(Material.Red)
+
+        visible: (FliesModel != null) ? FliesModel.isRunning : false
 
         onClicked: {
             FliesModel.stopSession()
@@ -84,6 +88,8 @@ RowLayout {
         id: flyButton
 
         icon.source: "res/fly.png"
+
+        enabled: (FliesModel != null) ? !FliesModel.isRunning : false
 
         onClicked: {
             FliesModel.signalizeToOpenFlySettingsWindow()

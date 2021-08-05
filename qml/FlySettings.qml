@@ -126,6 +126,8 @@ Popup {
                 editable: true
                 validator: IntValidator {}
 
+                value: 5
+
                 onValueChanged: {
                     if (value < 1)
                         value = 1

@@ -14,6 +14,8 @@
 class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
   Q_OBJECT
 
+  Q_PROPERTY(bool isRunning READ getIsRunning NOTIFY isRunningChanged)
+
  signals:
   void openFlyAdditionWindow(QString default_name,
                              int cells_max,
@@ -56,10 +58,16 @@ class FliesModel : public QAbstractListModel, public AbstractQMLHandler {
 
   QHash<int, QByteArray> roleNames() const override;
 
+  bool getIsRunning() const;
+
+ signals:
+  void isRunningChanged();
+
  private:
   const std::function<int()> kRequestCellsCount_;
   FliesHolder& flies_holder_;
   std::unique_ptr<QTimer> timer_;
+  bool is_running_{false};
 };
 
 #endif

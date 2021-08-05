@@ -43,7 +43,7 @@ Rectangle {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
 
-                text: cellFlies + " / " + cellCapacity
+                text: cellCapacity
 
                 color: Material.color(Material.Grey, Material.Shade500)
             }
