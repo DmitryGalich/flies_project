@@ -236,6 +236,8 @@ void Fly::Implementation::FlyingFunction() {
   bool is_x_increasing_motion{true};
   bool is_y_increasing_motion{true};
 
+  bool is_changing_cell{false};
+
   const auto SetStartPosition = [&](const PositionInfo& cell_position_info) {
     position_info_.x_ = GenerateValueInRange(
         (cell_position_info.x_ - real_position_shift_info_.x_),
@@ -285,7 +287,8 @@ void Fly::Implementation::FlyingFunction() {
 
             if (kRequestFlyReplacement_(
                     cell_id_, cells_to_move.at(random_cell_to_move_index))) {
-              cell_id_ = cells_to_move.at(random_cell_to_move_index);
+              //              cell_id_ =
+              //              cells_to_move.at(random_cell_to_move_index);
               std::cout << name_ << " moved to cell("
                         << cells_to_move.at(random_cell_to_move_index) << ")"
                         << std::endl;

@@ -98,8 +98,8 @@ std::vector<int> CellsHolder::GetPossibleCellsToMove(const int cell_index) {
   if (cells_.size() <= 1)
     return {};
 
-  int x = cells_.size() % cells_.size();
-  int y = std::floor(cells_.size() / std::sqrt(cells_.size()));
+  int x = cell_index % static_cast<int>(std::sqrt(cells_.size()));
+  int y = std::floor(cell_index / std::sqrt(cells_.size()));
 
   std::vector<int> acceptable_x_variants;
   std::vector<int> acceptable_y_variants;
@@ -110,7 +110,11 @@ std::vector<int> CellsHolder::GetPossibleCellsToMove(const int cell_index) {
   for (const auto x_coord : acceptable_x_variants)
     for (const auto y_coord : acceptable_y_variants) {
       int neighbour = y_coord * std::sqrt(cells_.size()) + x_coord;
-      if (neighbour != cell_index)
+      if (neighbour == cell_index)
+        continue;
+
+      if (cells_.at(neighbour).GetCapacity() >
+          cells_.at(neighbour).GetFliesCount())
         variants.push_back(neighbour);
     }
 
@@ -119,5 +123,10 @@ std::vector<int> CellsHolder::GetPossibleCellsToMove(const int cell_index) {
 
 bool CellsHolder::ReplaceFly(const int current_cell_index,
                              const int new_cell_index) {
+  cells_.at(current_cell_index).RemoveFly();
+
+  if (!cells_.at(new_cell_index).AddFly())
+    return false;
+
   return true;
 }
