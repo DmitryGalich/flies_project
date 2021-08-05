@@ -56,6 +56,8 @@ class Fly {
   int GetHeight() const;
   void SetHeight(const int height);
 
+  bool GetIsAlive() const;
+
   void PrintInfo() const;
 
  private:

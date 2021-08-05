@@ -72,6 +72,8 @@ class Fly::Implementation {
   int GetHeight();
   void SetHeight(const int height);
 
+  bool GetIsAlive() const;
+
   void PrintInfo() const;
 
  private:
@@ -89,7 +91,7 @@ class Fly::Implementation {
   std::string name_;
   int cell_id_{};
   bool is_need_stop_{false};
-  bool is_alive_{false};
+  bool is_alive_{true};
   PositionInfo position_info_{};
   PositionInfo real_position_shift_info_{};
   int cells_counter_{0};
@@ -122,8 +124,6 @@ Fly::Implementation::Implementation(
 
         return PositionInfo{0, 0, width, height};
       }()) {
-  is_visible_ = true;
-
   auto cell_position_info{kRequestCellPositionInfo_(cell_id_)};
   position_info_.x_ = GenerateValueInRange(
       (cell_position_info.x_ - real_position_shift_info_.x_),
@@ -247,6 +247,10 @@ void Fly::Implementation::SetHeight(const int height) {
   std::lock_guard<std::mutex> guard(mtx_);
 
   position_info_.height_ = height;
+}
+
+bool Fly::Implementation::GetIsAlive() const {
+  return is_alive_;
 }
 
 void Fly::Implementation::PrintInfo() const {
@@ -560,6 +564,10 @@ int Fly::GetHeight() const {
 
 void Fly::SetHeight(const int height) {
   impl_->SetHeight(height);
+}
+
+bool Fly::GetIsAlive() const {
+  return impl_->GetIsAlive();
 }
 
 void Fly::PrintInfo() const {

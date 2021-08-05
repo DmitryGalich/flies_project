@@ -49,6 +49,9 @@ QVariant FliesModel::data(const QModelIndex& index, int role) const {
   else if (role == VisablityRole)
     return flies_holder_.GetFly(index.row()).GetVisability();
 
+  else if (role == AliveRole)
+    return flies_holder_.GetFly(index.row()).GetIsAlive();
+
   return QVariant();
 }
 
@@ -140,6 +143,7 @@ QHash<int, QByteArray> FliesModel::roleNames() const {
   roles[HeightRole] = "flyHeight";
 
   roles[VisablityRole] = "flyVisible";
+  roles[AliveRole] = "flyAlive";
 
   return roles;
 }
