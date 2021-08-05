@@ -285,6 +285,18 @@ void Fly::Implementation::FlyingFunction() {
         (cell_position_info.y_ - real_position_shift_info_.y_),
         (cell_position_info.y_ + cell_position_info.height_ -
          position_info_.height_ - real_position_shift_info_.y_));
+
+    position_info_.width_ =
+        cell_position_info.width_ * kFlyWidthShareOfCellWidth;
+    position_info_.height_ =
+        cell_position_info.height_ * kFlyHeightShareOfCellHeight;
+  };
+
+  const auto CheckSize = [&](const PositionInfo& cell_position_info) {
+    position_info_.width_ =
+        cell_position_info.width_ * kFlyWidthShareOfCellWidth;
+    position_info_.height_ =
+        cell_position_info.height_ * kFlyHeightShareOfCellHeight;
   };
 
   const auto CheckAxisTargetPointReaching =
@@ -409,6 +421,8 @@ void Fly::Implementation::FlyingFunction() {
       cell_position_info = kRequestCellPositionInfo_(cell_id_);
 
       CheckSwitchingCell(appearence_in_cell_time);
+
+      CheckSize(cell_position_info);
 
       // X axis
       CheckAxisTargetPointReaching(is_x_increasing_motion, position_info_.x_,
