@@ -236,8 +236,6 @@ void Fly::Implementation::FlyingFunction() {
   bool is_x_increasing_motion{true};
   bool is_y_increasing_motion{true};
 
-  bool is_changing_cell{false};
-
   const auto SetStartPosition = [&](const PositionInfo& cell_position_info) {
     position_info_.x_ = GenerateValueInRange(
         (cell_position_info.x_ - real_position_shift_info_.x_),
@@ -271,34 +269,48 @@ void Fly::Implementation::FlyingFunction() {
   };
 
   const auto CheckSwitchingCell =
-      [&](std::chrono::time_point<std::chrono::system_clock>
+      [&](std::chrono::time_point<std::chrono::system_clock>&
               appearence_in_cell_time) {
         auto now = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> diff =
             now - appearence_in_cell_time;
 
-        if (diff.count() >= static_cast<double>(stupidity_ * 1000)) {
-          std::cout << name_ << " need change cell" << std::endl;
+        if (diff.count() < static_cast<double>(stupidity_ * 1000))
+          return;
 
-          auto cells_to_move = kRequestPossibleCellsToMove_(cell_id_);
-          if (!cells_to_move.empty()) {
-            int random_cell_to_move_index =
-                GenerateValueInRange(0, cells_to_move.size() - 1);
+        std::cout << name_ << " need change cell" << std::endl;
 
-            if (kRequestFlyReplacement_(
-                    cell_id_, cells_to_move.at(random_cell_to_move_index))) {
-              //              cell_id_ =
-              //              cells_to_move.at(random_cell_to_move_index);
-              std::cout << name_ << " moved to cell("
-                        << cells_to_move.at(random_cell_to_move_index) << ")"
-                        << std::endl;
-              return;
-            }
-          }
+        auto cells_to_move = kRequestPossibleCellsToMove_(cell_id_);
 
+        if (cells_to_move.empty()) {
           appearence_in_cell_time = std::chrono::high_resolution_clock::now();
           std::cout << name_ << " stays in the same cell" << std::endl;
+          return;
         }
+
+        int random_cell_to_move_index =
+            GenerateValueInRange(0, cells_to_move.size() - 1);
+
+        if (!kRequestFlyReplacement_(
+                cell_id_, cells_to_move.at(random_cell_to_move_index))) {
+          appearence_in_cell_time = std::chrono::high_resolution_clock::now();
+          std::cout << name_ << " stays in the same cell" << std::endl;
+          return;
+        }
+
+        cell_id_ = cells_to_move.at(random_cell_to_move_index);
+
+        auto target_cell_position_info = kRequestCellPositionInfo_(cell_id_);
+
+        target_point_x = target_cell_position_info.x_ +
+                         (target_cell_position_info.width_ / 2) -
+                         real_position_shift_info_.x_;
+        target_point_y = target_cell_position_info.y_ +
+                         (target_cell_position_info.height_ / 2) -
+                         real_position_shift_info_.y_;
+        appearence_in_cell_time = std::chrono::high_resolution_clock::now();
+
+        std::cout << name_ << " moved to cell(" << cell_id_ << ")" << std::endl;
       };
 
   // =========================================
