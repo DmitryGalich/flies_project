@@ -1,6 +1,6 @@
 #include "session_handler.h"
 
-#include <iostream>
+#include <cmath>
 
 SessionHandler::SessionHandler() {
   flies_holder_.SetRequestFlyAdditionToCell([&](const int cell_index) {
@@ -16,6 +16,9 @@ SessionHandler::SessionHandler() {
       [&](const int cell_index, const int new_cell_index) {
         return cells_holder_.ReplaceFly(cell_index, new_cell_index);
       });
+
+  flies_holder_.SetRequestCellsCountInEdge(
+      [&]() { return std::sqrt(cells_holder_.GetCellsCount()); });
 }
 
 FliesHolder& SessionHandler::GetFlies() {

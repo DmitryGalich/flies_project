@@ -17,6 +17,8 @@ const float kFlyHeightShareOfCellHeight{0.2};
 static const std::vector<std::string> kIconPaths{
     "res/fly_0.png", "res/fly_1.png", "res/fly_2.png", "res/fly_3.png"};
 
+static const std::string kDeathIconPath{"res/grave.png"};
+
 int GenerateValueInRange(int min, int max) {
   return min + (rand() % static_cast<int>(max - min + 1));
 };
@@ -33,7 +35,8 @@ class Fly::Implementation {
           request_cell_position_info,
       const std::function<std::vector<int>(const int)>
           request_possible_cells_to_move,
-      const std::function<bool(const int, const int)> request_fly_replacement);
+      const std::function<bool(const int, const int)> request_fly_replacement,
+      const std::function<int()> request_cells_count_in_edge);
   ~Implementation();
 
   void Run();
@@ -73,6 +76,7 @@ class Fly::Implementation {
   const std::function<PositionInfo(const int index)> kRequestCellPositionInfo_;
   const std::function<std::vector<int>(const int)> kRequestPossibleCellsToMove_;
   const std::function<bool(const int, const int)> kRequestFlyReplacement_;
+  const std::function<int()> kRequestCellsCountInEdge_;
 
   void FlyingFunction();
 
@@ -86,6 +90,7 @@ class Fly::Implementation {
   bool is_alive_{false};
   PositionInfo position_info_{};
   PositionInfo real_position_shift_info_{};
+  int cells_counter_{0};
 
   std::shared_ptr<std::thread> thread_;
   mutable std::mutex mtx_;
@@ -98,11 +103,12 @@ Fly::Implementation::Implementation(
     const std::function<PositionInfo(const int)> request_cell_position_info,
     const std::function<std::vector<int>(const int)>
         request_possible_cells_to_move,
-    const std::function<bool(const int, const int)> request_fly_replacement)
+    const std::function<bool(const int, const int)> request_fly_replacement,
+    const std::function<int()> request_cells_count_in_edge)
     : kRequestCellPositionInfo_(request_cell_position_info),
       kRequestPossibleCellsToMove_(request_possible_cells_to_move),
       kRequestFlyReplacement_(request_fly_replacement),
-      icon_path_(kIconPaths.at(flies_count++ % kIconPaths.size())),
+      kRequestCellsCountInEdge_(request_cells_count_in_edge),
       stupidity_(stupidity),
       name_(name),
       cell_id_(cell_id),
@@ -113,7 +119,19 @@ Fly::Implementation::Implementation(
         int height = kCellPositionInfo.height_ * kFlyHeightShareOfCellHeight;
 
         return PositionInfo{0, 0, width, height};
-      }()) {}
+      }()) {
+  is_visible_ = true;
+
+  auto cell_position_info{kRequestCellPositionInfo_(cell_id_)};
+  position_info_.x_ = GenerateValueInRange(
+      (cell_position_info.x_ - real_position_shift_info_.x_),
+      (cell_position_info.x_ + cell_position_info.width_ -
+       position_info_.width_ - real_position_shift_info_.x_));
+  position_info_.y_ = GenerateValueInRange(
+      (cell_position_info.y_ - real_position_shift_info_.y_),
+      (cell_position_info.y_ + cell_position_info.height_ -
+       position_info_.height_ - real_position_shift_info_.y_));
+}
 
 Fly::Implementation::~Implementation() {
   Stop();
@@ -239,8 +257,6 @@ void Fly::Implementation::FlyingFunction() {
   bool is_changing_cell_axis_x{false};
   bool is_changing_cell_axis_y{false};
 
-  int cells_counter{0};
-
   const auto SetStartPosition = [&](const PositionInfo& cell_position_info) {
     position_info_.x_ = GenerateValueInRange(
         (cell_position_info.x_ - real_position_shift_info_.x_),
@@ -313,8 +329,26 @@ void Fly::Implementation::FlyingFunction() {
                          (target_cell_position_info.height_ / 2) -
                          real_position_shift_info_.y_;
         appearence_in_cell_time = std::chrono::high_resolution_clock::now();
-        cells_counter++;
+        cells_counter_++;
       };
+
+  const auto CheckAge =
+      [&](const std::chrono::time_point<std::chrono::system_clock> kBirthTime) {
+        auto now = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> diff = now - kBirthTime;
+
+        if (diff.count() < static_cast<double>(age_ * 1000))
+          return;
+
+        age_++;
+
+        if (age_ < stupidity_ * kRequestCellsCountInEdge_())
+          return;
+
+        is_alive_ = false;
+      };
+
+  const auto ProcessDeath = [&]() { icon_path_ = kDeathIconPath; };
 
   // =========================================
 
@@ -326,17 +360,29 @@ void Fly::Implementation::FlyingFunction() {
     if (!is_visible_)
       is_visible_ = true;
 
+    cells_counter_ = 0;
+
+    is_alive_ = true;
+
     SetStartPosition(cell_position_info);
 
     target_point_x = cell_position_info.x_ - real_position_shift_info_.x_;
     target_point_y = cell_position_info.y_ - real_position_shift_info_.y_;
+
+    icon_path_ = kIconPaths.at(flies_count++ % kIconPaths.size());
   }
 
+  const auto kBirthTime = std::chrono::high_resolution_clock::now();
   auto appearence_in_cell_time = std::chrono::high_resolution_clock::now();
 
   while (!is_need_stop_) {
     {
       std::lock_guard<std::mutex> guard(mtx_);
+
+      if (!is_alive_) {
+        ProcessDeath();
+        break;
+      }
 
       cell_position_info = kRequestCellPositionInfo_(cell_id_);
 
@@ -355,6 +401,8 @@ void Fly::Implementation::FlyingFunction() {
           cell_position_info.y_, cell_position_info.height_, target_point_y,
           real_position_shift_info_.y_);
       MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
+
+      CheckAge(kBirthTime);
     }
 
     std::this_thread::sleep_for(
@@ -402,13 +450,15 @@ Fly::Fly(
     const std::function<PositionInfo(const int)> request_cell_position_info,
     const std::function<std::vector<int>(const int)>
         request_possible_cells_to_move,
-    const std::function<bool(const int, const int)> request_fly_replacement)
+    const std::function<bool(const int, const int)> request_fly_replacement,
+    const std::function<int()> request_cells_count_in_edge)
     : impl_(std::make_shared<Implementation>(name,
                                              stupidity,
                                              cell_id,
                                              request_cell_position_info,
                                              request_possible_cells_to_move,
-                                             request_fly_replacement)) {}
+                                             request_fly_replacement,
+                                             request_cells_count_in_edge)) {}
 
 std::string Fly::GetDefaultName() {
   return "fly_" + std::to_string(flies_count);

@@ -65,6 +65,12 @@ Rectangle {
 
             onXChanged: flyRealX = fly.mapToItem(flies, 0, 0).x
             onYChanged: flyRealY = fly.mapToItem(flies, 0, 0).y
+
+            onVisibleChanged: {
+                flyRealX = fly.mapToItem(flies, 0, 0).x
+                flyRealY = fly.mapToItem(flies, 0, 0).y
+            }
+
             Image {
                 id: flyImage
                 source: flyIcon

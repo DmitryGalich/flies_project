@@ -14,5 +14,6 @@
         <file>res/fly_3.png</file>
         <file>FlySettings.qml</file>
         <file>res/explosion.gif</file>
+        <file>res/grave.png</file>
     </qresource>
 </RCC>

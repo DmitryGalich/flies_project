@@ -21,12 +21,14 @@ class FliesHolder::Implementation {
       const std::function<std::vector<int>(const int)> request);
   void SetRequestFlyReplacement(
       const std::function<bool(const int, const int)> request);
+  void SetRequestCellsCountInEdge(const std::function<int()> request);
 
  private:
   std::function<bool(const int)> add_fly_to_cell_;
   std::function<PositionInfo(const int)> request_cell_position_info_;
   std::function<std::vector<int>(const int)> request_possible_cells_to_move_;
   std::function<bool(const int, const int)> request_fly_replacement_;
+  std::function<int()> request_cells_count_in_edge_;
 
   std::vector<Fly> flies_;
 };
@@ -38,7 +40,8 @@ FliesHolder::ErrorCodes FliesHolder::Implementation::AddFly(std::string name,
     return ErrorCodes::kWrongCell;
 
   flies_.push_back({name, stupidity, cell_id, request_cell_position_info_,
-                    request_possible_cells_to_move_, request_fly_replacement_});
+                    request_possible_cells_to_move_, request_fly_replacement_,
+                    request_cells_count_in_edge_});
   return ErrorCodes::kOk;
 }
 
@@ -88,6 +91,11 @@ void FliesHolder::Implementation::SetRequestFlyReplacement(
   request_fly_replacement_ = request;
 }
 
+void FliesHolder::Implementation::SetRequestCellsCountInEdge(
+    const std::function<int()> request) {
+  request_cells_count_in_edge_ = request;
+}
+
 // ======================================================
 
 FliesHolder::FliesHolder() : impl_(std::make_shared<Implementation>()) {}
@@ -132,4 +140,9 @@ void FliesHolder::SetRequestPossibleCellsToMove(
 void FliesHolder::SetRequestFlyReplacement(
     const std::function<bool(const int, const int)> request) {
   impl_->SetRequestFlyReplacement(request);
+}
+
+void FliesHolder::SetRequestCellsCountInEdge(
+    const std::function<int()> request) {
+  impl_->SetRequestCellsCountInEdge(request);
 }

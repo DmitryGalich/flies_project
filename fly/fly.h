@@ -16,7 +16,8 @@ class Fly {
           request_cell_position_info,
       const std::function<std::vector<int>(const int)>
           request_possible_cells_to_move,
-      const std::function<bool(const int, const int)> request_fly_replacement);
+      const std::function<bool(const int, const int)> request_fly_replacement,
+      const std::function<int()> request_cells_count_in_edge);
   ~Fly() = default;
 
   static std::string GetDefaultName();
@@ -83,6 +84,7 @@ class FliesHolder {
       const std::function<std::vector<int>(const int)> request);
   void SetRequestFlyReplacement(
       const std::function<bool(const int, const int)> request);
+  void SetRequestCellsCountInEdge(const std::function<int()> request);
 
  private:
   class Implementation;
