@@ -236,9 +236,6 @@ void Fly::Implementation::FlyingFunction() {
   bool is_x_increasing_motion{true};
   bool is_y_increasing_motion{true};
 
-  int flying_seconds_counter{0};
-  int cycle_rounds_counter{0};
-
   const auto SetStartPosition = [&](const PositionInfo& cell_position_info) {
     position_info_.x_ = GenerateValueInRange(
         (cell_position_info.x_ - real_position_shift_info_.x_),
@@ -271,6 +268,36 @@ void Fly::Implementation::FlyingFunction() {
       fly_position--;
   };
 
+  const auto CheckSwitchingCell =
+      [&](std::chrono::time_point<std::chrono::system_clock>
+              appearence_in_cell_time) {
+        auto now = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> diff =
+            now - appearence_in_cell_time;
+
+        if (diff.count() >= static_cast<double>(stupidity_ * 1000)) {
+          std::cout << name_ << " need change cell" << std::endl;
+
+          auto cells_to_move = kRequestPossibleCellsToMove_(cell_id_);
+          if (!cells_to_move.empty()) {
+            int random_cell_to_move_index =
+                GenerateValueInRange(0, cells_to_move.size() - 1);
+
+            if (kRequestFlyReplacement_(
+                    cell_id_, cells_to_move.at(random_cell_to_move_index))) {
+              cell_id_ = cells_to_move.at(random_cell_to_move_index);
+              std::cout << name_ << " moved to cell("
+                        << cells_to_move.at(random_cell_to_move_index) << ")"
+                        << std::endl;
+              return;
+            }
+          }
+
+          appearence_in_cell_time = std::chrono::high_resolution_clock::now();
+          std::cout << name_ << " stays in the same cell" << std::endl;
+        }
+      };
+
   // =========================================
 
   auto cell_position_info{kRequestCellPositionInfo_(cell_id_)};
@@ -287,11 +314,15 @@ void Fly::Implementation::FlyingFunction() {
     target_point_y = cell_position_info.y_ - real_position_shift_info_.y_;
   }
 
+  auto appearence_in_cell_time = std::chrono::high_resolution_clock::now();
+
   while (!is_need_stop_) {
     {
       std::lock_guard<std::mutex> guard(mtx_);
 
       cell_position_info = kRequestCellPositionInfo_(cell_id_);
+
+      CheckSwitchingCell(appearence_in_cell_time);
 
       // X axis
       CheckAxisTargetPointReaching(is_x_increasing_motion, position_info_.x_,
@@ -306,8 +337,6 @@ void Fly::Implementation::FlyingFunction() {
           cell_position_info.y_, cell_position_info.height_, target_point_y,
           real_position_shift_info_.y_);
       MoveFlyOnAxis(is_y_increasing_motion, position_info_.y_);
-
-      //      cycle_rounds_counter++;
     }
 
     std::this_thread::sleep_for(
@@ -319,8 +348,6 @@ void Fly::Implementation::Run() {
   if (thread_)
     return;
 
-  std::cout << std::this_thread::get_id() << " : Run" << std::endl;
-
   std::lock_guard<std::mutex> guard(mtx_);
 
   thread_.reset(new std::thread([&]() { FlyingFunction(); }));
@@ -329,8 +356,6 @@ void Fly::Implementation::Run() {
 }
 
 void Fly::Implementation::RequestStop() {
-  std::cout << std::this_thread::get_id() << " : Request stop" << std::endl;
-
   if (!thread_)
     return;
 
@@ -340,8 +365,6 @@ void Fly::Implementation::RequestStop() {
 }
 
 void Fly::Implementation::Stop() {
-  std::cout << std::this_thread::get_id() << " : Stop" << std::endl;
-
   if (!thread_)
     return;
 
