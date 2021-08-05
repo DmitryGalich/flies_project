@@ -56,6 +56,8 @@ class Fly {
   int GetHeight() const;
   void SetHeight(const int height);
 
+  void PrintInfo() const;
+
  private:
   class Implementation;
   std::shared_ptr<Implementation> impl_;

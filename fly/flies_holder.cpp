@@ -1,5 +1,7 @@
 #include "fly.h"
 
+#include <iostream>
+
 class FliesHolder::Implementation {
  public:
   Implementation() = default;
@@ -42,6 +44,10 @@ FliesHolder::ErrorCodes FliesHolder::Implementation::AddFly(std::string name,
   flies_.push_back({name, stupidity, cell_id, request_cell_position_info_,
                     request_possible_cells_to_move_, request_fly_replacement_,
                     request_cells_count_in_edge_});
+
+  std::cout << "Fly \"" << name << "\" with stupidity " << stupidity
+            << " was added in cell " << cell_id << std::endl;
+
   return ErrorCodes::kOk;
 }
 
@@ -60,6 +66,8 @@ bool FliesHolder::Implementation::Run() {
   for (auto& fly : flies_)
     fly.Run();
 
+  std::cout << "Start flying" << std::endl;
+
   return true;
 }
 
@@ -69,6 +77,11 @@ void FliesHolder::Implementation::Stop() {
 
   for (auto& fly : flies_)
     fly.Stop();
+
+  std::cout << "Stop flying" << std::endl;
+
+  for (auto& fly : flies_)
+    fly.PrintInfo();
 }
 
 void FliesHolder::Implementation::SetRequestFlyAdditionToCell(

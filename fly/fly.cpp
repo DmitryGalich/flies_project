@@ -72,6 +72,8 @@ class Fly::Implementation {
   int GetHeight();
   void SetHeight(const int height);
 
+  void PrintInfo() const;
+
  private:
   const std::function<PositionInfo(const int index)> kRequestCellPositionInfo_;
   const std::function<std::vector<int>(const int)> kRequestPossibleCellsToMove_;
@@ -247,6 +249,19 @@ void Fly::Implementation::SetHeight(const int height) {
   position_info_.height_ = height;
 }
 
+void Fly::Implementation::PrintInfo() const {
+  std::cout << "===================================" << std::endl;
+
+  std::cout << "name: " << name_ << std::endl;
+  std::cout << "age: " << age_ << std::endl;
+  std::cout << "is alive: " << ((is_alive_) ? "Yes" : "Not") << std::endl;
+  std::cout << "stupidity: " << stupidity_ << std::endl;
+  std::cout << "current cell: " << cell_id_ << std::endl;
+  std::cout << "cells count: " << cells_counter_ << std::endl;
+
+  std::cout << "===================================" << std::endl;
+}
+
 void Fly::Implementation::FlyingFunction() {
   int target_point_x{0};
   int target_point_y{0};
@@ -348,7 +363,10 @@ void Fly::Implementation::FlyingFunction() {
         is_alive_ = false;
       };
 
-  const auto ProcessDeath = [&]() { icon_path_ = kDeathIconPath; };
+  const auto ProcessDeath = [&]() {
+    icon_path_ = kDeathIconPath;
+    std::cout << "Fly " << name_ << " is dead... RIP" << std::endl;
+  };
 
   // =========================================
 
@@ -542,6 +560,10 @@ int Fly::GetHeight() const {
 
 void Fly::SetHeight(const int height) {
   impl_->SetHeight(height);
+}
+
+void Fly::PrintInfo() const {
+  impl_->PrintInfo();
 }
 
 void Fly::Run() {
